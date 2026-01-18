@@ -1,0 +1,18 @@
+FROM node:24.12.0-alpine3.23
+
+RUN apk add bash curl vim
+
+RUN npm install -g npm@11.7.0 typescript@5.9.3 pnpm@10.26.2
+
+WORKDIR /backend
+
+COPY package.json ./
+
+RUN pnpm install
+
+EXPOSE 5000
+
+# Please Run pnpm run db:migrate after launching container inside linux app folder
+# CMD ["pnpm", "db:migrate", "&&", "pnpm run dev"]
+
+CMD [ "pnpm", "dev"]
