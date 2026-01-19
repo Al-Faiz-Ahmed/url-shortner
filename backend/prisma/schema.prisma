@@ -7,15 +7,15 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
+model short_urls {
   id String @id @default(uuid())
-  username String @unique
-  firstName String? @map("first_name")
-  lastName String? @map("last_name")
-  profileImageURL String? @map("profile_image_url")
-  email String @unique
-  password String
-  salt String  
+  givenURL String @map("given_url")
+  generatedURL String @map("generated_url")
+  uniqueHash String @map("unique_hash")
 
-  @@map("users")
+  // Users id 
+
+  user_id has to be added as foreign key  
+
+  @@map("short_urls")
 }
