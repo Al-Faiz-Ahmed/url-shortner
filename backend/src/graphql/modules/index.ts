@@ -12,9 +12,9 @@
 
 export const moduleResolvers = {
   Query: {
-    // ...userResolvers.queries,
+    ...userResolvers.queries,
   },
   Mutation: {
-    // ...userResolvers.mutations,
+    ...userResolvers.mutations,
   },
 }

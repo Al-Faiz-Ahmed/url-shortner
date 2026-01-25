@@ -1,21 +1,37 @@
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model short_urls {
-  id String @id @default(uuid())
-  givenURL String @map("given_url")
-  generatedURL String @map("generated_url")
-  uniqueHash String @map("unique_hash")
+model users {
+  id                 String   @id @default(uuid())
+  ipAddress          String   @map("ip_address")
+  createdAt          DateTime @default(now()) @map("created_at")
+  totalShortenedURL  Int      @default(0) @map("total_shortened_url")
+  generatedUrls generated_urls[]
 
-  // Users id 
+  @@map("users")
+}
 
-  user_id has to be added as foreign key  
+model generated_urls {
+  id             String   @id @default(uuid())
+  givenURL       String   @map("given_url")
+  generatedURL   String   @map("generated_url")
+  uniqueHash     String   @unique @map("unique_hash")
+  isBlock        Boolean  @default(false) @map("is_block")
+  totalVisitors  Int      @default(0) @map("total_visitors")
 
-  @@map("short_urls")
+  // Foreign key
+  userId String @map("user_id")
+  user   users  @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("generated_urls")
 }
