@@ -24,6 +24,9 @@ CREATE TABLE "generated_urls" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "generated_urls_generated_url_key" ON "generated_urls"("generated_url");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "generated_urls_unique_hash_key" ON "generated_urls"("unique_hash");
 
 -- AddForeignKey

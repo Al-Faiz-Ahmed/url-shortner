@@ -10,7 +10,8 @@ export const genUrlMutationsResolver = {
 
   generateUniqueURL : async (_: unknown, payload: {input:IGenUniqueUrl}, context: GraphQLContext) => {
 
-    GenURL.generateUniqueURL(payload.input, context);
+    return await GenURL.generateUniqueURL(payload.input, context);
+    
   },
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
 };

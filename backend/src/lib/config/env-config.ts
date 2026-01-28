@@ -1,4 +1,6 @@
+import "dotenv/config"
 const { PORT, DATABASE_URL, ENV } = process.env;
+ 
 
 export const config = {
   ENV: ENV as "development" | "production",

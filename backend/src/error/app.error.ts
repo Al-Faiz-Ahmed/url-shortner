@@ -89,5 +89,3 @@ export const InternalServerError = (
     statusCode: 500,
     meta,
   });
-
-  
