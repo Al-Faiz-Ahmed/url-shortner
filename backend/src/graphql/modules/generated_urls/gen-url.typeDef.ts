@@ -18,4 +18,10 @@ export const  genUrlTypeDefs = gql`
     updatedAt: DateTime!
   }
 
+  input genUniqueUrlInput {
+    givenURL: String!
+    uniqueHash: String!
+    userId: String
+  }
+
 `;

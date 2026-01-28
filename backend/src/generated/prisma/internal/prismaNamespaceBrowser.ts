@@ -51,8 +51,8 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  users: 'users',
-  generated_urls: 'generated_urls'
+  User: 'User',
+  GeneratedURL: 'GeneratedURL'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -71,17 +71,17 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const UsersScalarFieldEnum = {
+export const UserScalarFieldEnum = {
   id: 'id',
   ipAddress: 'ipAddress',
   createdAt: 'createdAt',
   totalShortenedURL: 'totalShortenedURL'
 } as const
 
-export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const Generated_urlsScalarFieldEnum = {
+export const GeneratedURLScalarFieldEnum = {
   id: 'id',
   givenURL: 'givenURL',
   generatedURL: 'generatedURL',
@@ -93,7 +93,7 @@ export const Generated_urlsScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type Generated_urlsScalarFieldEnum = (typeof Generated_urlsScalarFieldEnum)[keyof typeof Generated_urlsScalarFieldEnum]
+export type GeneratedURLScalarFieldEnum = (typeof GeneratedURLScalarFieldEnum)[keyof typeof GeneratedURLScalarFieldEnum]
 
 
 export const SortOrder = {

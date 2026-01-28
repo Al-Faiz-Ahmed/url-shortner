@@ -1,20 +1,18 @@
-import { userTypeDefs } from './user/user.type'
-import { userQueryDefs } from './user/user.query'
-import { userMutationDefs } from './user/user.mutation'
-import { userResolvers } from './user/user.resolver'
+import {
+  genUrlAllTypeDefs,
+  genUrlResolvers,
+} from "./generated_urls/gen-url.exportType";
+import { userAllTypeDefs, userResolvers } from "./user/user.exportType";
 
-export const moduleTypeDefs = [
-  userTypeDefs,
-  userQueryDefs,
-  userMutationDefs,
-]
-
+export const moduleTypeDefs = [...userAllTypeDefs, ...genUrlAllTypeDefs];
 
 export const moduleResolvers = {
   Query: {
     ...userResolvers.queries,
+    ...genUrlResolvers.queries,
   },
   Mutation: {
     ...userResolvers.mutations,
+    ...genUrlResolvers.mutations,
   },
-}
+};

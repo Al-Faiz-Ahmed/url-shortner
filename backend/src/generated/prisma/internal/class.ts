@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel users {\n  id                String           @id @default(uuid())\n  ipAddress         String           @map(\"ip_address\")\n  createdAt         DateTime         @default(now()) @map(\"created_at\")\n  totalShortenedURL Int              @default(0) @map(\"total_shortened_url\")\n  generatedUrls     generated_urls[]\n\n  @@map(\"users\")\n}\n\nmodel generated_urls {\n  id            String  @id @default(uuid())\n  givenURL      String  @map(\"given_url\")\n  generatedURL  String  @map(\"generated_url\")\n  uniqueHash    String  @unique @map(\"unique_hash\")\n  isBlock       Boolean @default(false) @map(\"is_block\")\n  totalVisitors Int     @default(0) @map(\"total_visitors\")\n\n  // Foreign key\n  userId String @map(\"user_id\")\n  user   users  @relation(fields: [userId], references: [id])\n\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"generated_urls\")\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id                String         @id @default(uuid())\n  ipAddress         String         @map(\"ip_address\")\n  createdAt         DateTime       @default(now()) @map(\"created_at\")\n  totalShortenedURL Int            @default(0) @map(\"total_shortened_url\")\n  generatedUrls     GeneratedURL[]\n\n  @@map(\"users\")\n}\n\nmodel GeneratedURL {\n  id            String  @id @default(uuid())\n  givenURL      String  @map(\"given_url\")\n  generatedURL  String  @unique @map(\"generated_url\")\n  uniqueHash    String  @unique @map(\"unique_hash\")\n  isBlock       Boolean @default(false) @map(\"is_block\")\n  totalVisitors Int     @default(0) @map(\"total_visitors\")\n\n  // Foreign key\n  userId String @map(\"user_id\")\n  user   User   @relation(fields: [userId], references: [id])\n\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"generated_urls\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"users\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ipAddress\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"ip_address\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"totalShortenedURL\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"total_shortened_url\"},{\"name\":\"generatedUrls\",\"kind\":\"object\",\"type\":\"generated_urls\",\"relationName\":\"generated_urlsTousers\"}],\"dbName\":\"users\"},\"generated_urls\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"givenURL\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"given_url\"},{\"name\":\"generatedURL\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"generated_url\"},{\"name\":\"uniqueHash\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"unique_hash\"},{\"name\":\"isBlock\",\"kind\":\"scalar\",\"type\":\"Boolean\",\"dbName\":\"is_block\"},{\"name\":\"totalVisitors\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"total_visitors\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"user_id\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"generated_urlsTousers\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"}],\"dbName\":\"generated_urls\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ipAddress\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"ip_address\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"totalShortenedURL\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"total_shortened_url\"},{\"name\":\"generatedUrls\",\"kind\":\"object\",\"type\":\"GeneratedURL\",\"relationName\":\"GeneratedURLToUser\"}],\"dbName\":\"users\"},\"GeneratedURL\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"givenURL\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"given_url\"},{\"name\":\"generatedURL\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"generated_url\"},{\"name\":\"uniqueHash\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"unique_hash\"},{\"name\":\"isBlock\",\"kind\":\"scalar\",\"type\":\"Boolean\",\"dbName\":\"is_block\"},{\"name\":\"totalVisitors\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"total_visitors\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"user_id\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"GeneratedURLToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"}],\"dbName\":\"generated_urls\"}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -61,7 +61,7 @@ export interface PrismaClientConstructor {
    * ```
    * const prisma = new PrismaClient()
    * // Fetch zero or more Users
-   * const users = await prisma.users.findMany()
+   * const users = await prisma.user.findMany()
    * ```
    * 
    * Read more in our [docs](https://pris.ly/d/client).
@@ -83,7 +83,7 @@ export interface PrismaClientConstructor {
  * ```
  * const prisma = new PrismaClient()
  * // Fetch zero or more Users
- * const users = await prisma.users.findMany()
+ * const users = await prisma.user.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -177,24 +177,24 @@ export interface PrismaClient<
   }>>
 
       /**
-   * `prisma.users`: Exposes CRUD operations for the **users** model.
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
     * // Fetch zero or more Users
-    * const users = await prisma.users.findMany()
+    * const users = await prisma.user.findMany()
     * ```
     */
-  get users(): Prisma.usersDelegate<ExtArgs, { omit: OmitOpts }>;
+  get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
-   * `prisma.generated_urls`: Exposes CRUD operations for the **generated_urls** model.
+   * `prisma.generatedURL`: Exposes CRUD operations for the **GeneratedURL** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Generated_urls
-    * const generated_urls = await prisma.generated_urls.findMany()
+    * // Fetch zero or more GeneratedURLS
+    * const generatedURLS = await prisma.generatedURL.findMany()
     * ```
     */
-  get generated_urls(): Prisma.generated_urlsDelegate<ExtArgs, { omit: OmitOpts }>;
+  get generatedURL(): Prisma.GeneratedURLDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

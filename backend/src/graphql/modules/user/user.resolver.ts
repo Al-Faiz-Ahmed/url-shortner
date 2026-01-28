@@ -2,11 +2,11 @@ import { GraphQLContext } from "../../context/context";
 // import { ICreateUser,  IDeleteUser,  IUpdateUser } from "./types";
 // import UserService from "./user.services";
 
-const queries = {
+export const userQueriesResolver = {
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
 };
 
-const mutations = {
+export const userMutationsResolver = {
 //   createUser: async (
 //     _: unknown,
 //     payload: {input:ICreateUser},
@@ -38,4 +38,3 @@ const mutations = {
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
 };
 
-export const userResolvers = { queries, mutations };

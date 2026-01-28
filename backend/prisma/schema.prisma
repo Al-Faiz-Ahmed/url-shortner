@@ -8,27 +8,27 @@ datasource db {
 }
 
 
-model users {
+model User {
   id                 String   @id @default(uuid())
   ipAddress          String   @map("ip_address")
   createdAt          DateTime @default(now()) @map("created_at")
   totalShortenedURL  Int      @default(0) @map("total_shortened_url")
-  generatedUrls generated_urls[]
+  generatedUrls GeneratedURL[]
 
   @@map("users")
 }
 
-model generated_urls {
+model GeneratedURL {
   id             String   @id @default(uuid())
   givenURL       String   @map("given_url")
-  generatedURL   String   @map("generated_url")
+  generatedURL   String   @unique @map("generated_url")
   uniqueHash     String   @unique @map("unique_hash")
   isBlock        Boolean  @default(false) @map("is_block")
   totalVisitors  Int      @default(0) @map("total_visitors")
 
   // Foreign key
   userId String @map("user_id")
-  user   users  @relation(fields: [userId], references: [id])
+  user   User  @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
