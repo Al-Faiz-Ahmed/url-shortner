@@ -5,7 +5,7 @@ import { GeneratedURL,User } from "../../generated/prisma/client";
 
 // input
 export type IGenUniqueUrl = Pick<GeneratedURL, "givenURL" | "uniqueHash"> & {
-  userId?: string | null;
+  userId?: string;
 };
 
 

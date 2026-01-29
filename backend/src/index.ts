@@ -17,7 +17,7 @@ const yoga = createYoga({
 globalMiddleWareController(app);
 
 app.get("/", (_req, res) => {
-  res.json({message:"Server Root Page served"})
+  res.json({message:"Server Root Page served succesfully"})
 });
 
 

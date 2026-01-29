@@ -13,6 +13,7 @@ export const genUrlMutationsResolver = {
     return await GenURL.generateUniqueURL(payload.input, context);
     
   },
+  
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
 };
 

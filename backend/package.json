@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "devv": "tsc-watch --onCompilationComplete \"tsc-alias\" --onSuccess \"npm start\"",
+    "devv": "tsx watch src/index.ts",
+    "dev": "tsc-watch --onCompilationComplete \"tsc-alias\" --onSuccess \"npm start\"",
     "build": "tsc && tsc-alias",
     "start": "node build/index.js",
     "db:generate": "prisma generate",
