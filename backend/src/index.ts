@@ -1,7 +1,7 @@
 import express, { type Request, type Response } from "express";
 import { createYoga, YogaInitialContext } from "graphql-yoga";
 import { globalMiddleWareController } from "./middleware/global";
-import { config } from "./lib/config/env-config";
+import { envConfig } from "./lib/config/env-config";
 import {schema} from "./graphql"
 import { createContext } from "./graphql/context/context";
 
@@ -9,7 +9,7 @@ import { createContext } from "./graphql/context/context";
 const app = express();
 const yoga = createYoga({
   schema,
-  graphiql: true,
+  graphiql: envConfig.ENV !== "production",
   context : async ({request}) => createContext(request),
   
 });
@@ -23,7 +23,7 @@ app.get("/", (_req, res) => {
 
 app.use("/graphql", yoga);
 
-app.listen(config.PORT,"0.0.0.0", () => {
-  console.log(`Server Started on http://localhost:${config.PORT}`);
+app.listen(envConfig.PORT,"0.0.0.0", () => {
+  console.log(`Server Started on http://localhost:${envConfig.PORT}`);
 });
 

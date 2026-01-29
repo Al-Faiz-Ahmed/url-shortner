@@ -15,4 +15,6 @@ EXPOSE 5000
 # Please Run pnpm run db:migrate after launching container inside linux app folder
 # CMD ["pnpm", "db:migrate", "&&", "pnpm run dev"]
 
-CMD [ "pnpm", "dev"]
+# CMD [ "pnpm", "dev"]
+
+CMD ["sh", "-c", "echo 'Container Ready'; tail -f /dev/null"]
