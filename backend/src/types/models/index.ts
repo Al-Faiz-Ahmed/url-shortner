@@ -9,3 +9,11 @@ export type IGenUniqueUrl = Pick<GeneratedURL, "givenURL" | "uniqueHash"> & {
 };
 
 
+
+
+
+// export type IUpdateUser = Pick<User, "totalShortenedURL"|"id"> & {
+//   userId?: string;
+// };
+
+

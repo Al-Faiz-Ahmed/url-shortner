@@ -3,15 +3,14 @@ import { vGenUniqueUrl } from "../validations/models/gen-url-validation";
 import type { GraphQLContext } from "../graphql/context/context";
 import { ValidationError } from "../error/app.error";
 import { CatchPrismaError } from "../error/prisma.error";
-import { User } from "./user.service";
 import { envConfig } from "../lib/config/env-config";
 
 
-export class GenURL {
+export class GenUrlService {
 
 
   public static async generateUniqueURL(
-    payload: IGenUniqueUrl,
+    payload: IGenUniqueUrl&{userId:string},
     context: GraphQLContext,
   ) {
     const { prisma } = context;
@@ -25,11 +24,6 @@ export class GenURL {
     }
 
     try {
-
-      let user = await User.createUser(context)
-      // if (!payload.userId) {
-      //   throw ValidationError("userId is required");
-      // }
       
       const newGeneratedUrl = `${envConfig.PUBLIC_SITE_URL}/${payload.uniqueHash}`
       const created = await prisma.generatedURL.create({
@@ -37,7 +31,7 @@ export class GenURL {
           givenURL: payload.givenURL,
           uniqueHash: payload.uniqueHash,
           generatedURL: newGeneratedUrl,
-          userId: user.id,
+          userId: payload.userId,
         },
       });
 

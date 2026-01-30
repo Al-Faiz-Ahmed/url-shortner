@@ -1,35 +1,54 @@
 import { ValidationError } from "../error/app.error";
 import { CatchPrismaError } from "../error/prisma.error";
 import type { GraphQLContext } from "../graphql/context/context";
-import { prisma } from "../lib/config/prisma-config";
 import { getClientIp } from "../lib/utils/get-IpAddress";
 // import { ICreateUser } from "../types/models";
 // import { vCreateUser } from "../validations/models/user-validation";
 
-export class User {
-  public static async createUser(
-    context: GraphQLContext,
-  ) {
-    const {  req } = context;
-    // const response = vCreateUser.safeParse({ ...payload });
+export class UserService {
+  public static async getUserById(userId: string, context: GraphQLContext) {
+    const { prisma } = context;
+    try {
+      return prisma.user.findFirst({
+        where: {
+          id: userId,
+        },
+      });
+    } catch (err) {
+      console.log("Error from Creating User", err);
+      CatchPrismaError(err);
+    }
+  }
+  public static async createUser(context: GraphQLContext) {
+    const { prisma,req } = context;
 
-    // if (response.success === false) {
-    //   const schemaErr =
-    //     response.error.issues[0]?.message || "Error found in schema";
-
-    //   throw ValidationError(schemaErr);
-    // }
-
-    const clientIpAddress = getClientIp(req) || ""
+    const clientIpAddress = getClientIp(req) || "";
 
     try {
       return prisma.user.create({
         data: {
-          ipAddress:clientIpAddress,
+          ipAddress: clientIpAddress,
         },
       });
     } catch (err) {
-        console.log("Error from Creating User", err)
+      console.log("Error from Creating User", err);
+      CatchPrismaError(err);
+    }
+  }
+
+  public static async updateUserTotalShortendURL(userId: string, context: GraphQLContext, ) {
+    const { prisma } = context;
+    try {
+      return prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          totalShortenedURL: { increment: 1 },
+        },
+      });
+    } catch (err) {
+      console.log("Error from Creating User", err);
       CatchPrismaError(err);
     }
   }
