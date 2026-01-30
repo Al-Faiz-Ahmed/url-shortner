@@ -6,7 +6,7 @@ export const  genUrlTypeDefs = gql`
 
   ${DateTimeTypeDefinition}
   
-  type generatedUrl {
+  type GeneratedUrl {
     id: ID!
     givenURL: String!
     generatedURL: String!
