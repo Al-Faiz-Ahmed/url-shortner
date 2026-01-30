@@ -5,6 +5,19 @@ import { UserService } from "../../../services/user.service";
 import { CatchPrismaError } from "../../../error/prisma.error";
 
 export const genUrlQueriesResolver = {
+  getAllUrl: async (
+    _: unknown,
+    { userId }: { userId: string },
+    context: GraphQLContext,
+  ) => {
+    if (!userId) return null;
+    try {
+      return await GenUrlService.getAllUrlById(userId, context);
+    } catch (err) {
+      console.log("Error from getAllUrlQueryResolver", err);
+      CatchPrismaError(err);
+    }
+  },
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
 };
 

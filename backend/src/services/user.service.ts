@@ -9,7 +9,7 @@ export class UserService {
   public static async getUserById(userId: string, context: GraphQLContext) {
     const { prisma } = context;
     try {
-      return prisma.user.findFirst({
+      return prisma.user.findUnique({
         where: {
           id: userId,
         },
@@ -20,7 +20,7 @@ export class UserService {
     }
   }
   public static async createUser(context: GraphQLContext) {
-    const { prisma,req } = context;
+    const { prisma, req } = context;
 
     const clientIpAddress = getClientIp(req) || "";
 
@@ -36,7 +36,10 @@ export class UserService {
     }
   }
 
-  public static async updateUserTotalShortendURL(userId: string, context: GraphQLContext, ) {
+  public static async updateUserTotalShortendURL(
+    userId: string,
+    context: GraphQLContext,
+  ) {
     const { prisma } = context;
     try {
       return prisma.user.update({

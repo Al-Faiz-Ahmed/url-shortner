@@ -2,7 +2,7 @@ import {
   genUrlAllTypeDefs,
   genUrlResolvers,
 } from "./generated_urls/gen-url.exportType";
-import { userAllTypeDefs, userResolvers } from "./user/user.exportType";
+import { userAllTypeDefs, userResolvers, } from "./user/user.exportType";
 
 export const moduleTypeDefs = [...userAllTypeDefs, ...genUrlAllTypeDefs];
 
@@ -15,4 +15,9 @@ export const moduleResolvers = {
     ...userResolvers.mutations,
     ...genUrlResolvers.mutations,
   },
+
+  Feilds:{
+    ...userResolvers.feildsTypes
+  }
+
 };

@@ -6,6 +6,6 @@ export const userTypeDefs = gql`
     ipAddress: String!
     createdAt: String!
     totalShortenedURL: String!
-    generatedUrls: [GeneratedUrl!]!
+    generatedUrls: [GeneratedUrl!]
   }
 `;

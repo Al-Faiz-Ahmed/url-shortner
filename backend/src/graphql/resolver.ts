@@ -7,4 +7,6 @@ export const resolvers = {
   Mutation: {
     ...moduleResolvers.Mutation,
   },
+  
+  ...moduleResolvers.Feilds,
 }

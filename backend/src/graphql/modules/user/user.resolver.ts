@@ -1,12 +1,18 @@
+import { NotFoundError } from "../../../error/app.error";
 import { UserService } from "../../../services/user.service";
 import { GraphQLContext } from "../../context/context";
 // import { ICreateUser,  IDeleteUser,  IUpdateUser } from "./types";
 // import UserService from "./user.services";
 
 export const userQueriesResolver = {
-  getUser: async (_: unknown, { id }: { id: string }, context: GraphQLContext) => {
-     return await UserService.getUserById(id,context)
+  getUser: async (_: unknown, { userId }: { userId: string }, context: GraphQLContext) => {
+     const result = await UserService.getUserById(userId,context)
+     if(!result){
+      throw NotFoundError("User not Found regarding your id",{userId})
+     }
+     return result
   },
+  
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
 };
 
@@ -38,6 +44,17 @@ export const userMutationsResolver = {
   //     const res = await UserService.deleteUser(payload);
   //     return "User Successfully Deleted";
   //   },
-
+  
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
+};
+
+export const userFeildsResolver = {
+  User: {
+    generatedUrls: async (parent: any, _: any, ctx: GraphQLContext) => {
+      if (!parent.id) return null;
+      return ctx.prisma.generatedURL.findMany({
+        where: { userId: parent.id },
+      });
+    },
+  },
 };
