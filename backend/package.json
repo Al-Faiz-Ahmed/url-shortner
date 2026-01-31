@@ -9,7 +9,10 @@
     "build": "tsc && tsc-alias",
     "start": "node build/index.js",
     "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev && prisma generate"
+    "db:migrate": "prisma migrate dev && prisma generate",
+    "dc:up:d": "docker compose -f docker-compose.dev.yml up -d",
+    "dc:build": "docker compose -f docker-compose.dev.yml build",
+    "dc:dc": "docker stop backend_dev"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +33,7 @@
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "cors": "^2.8.5",
+    "dataloader": "^2.2.3",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "graphql": "^16.12.0",

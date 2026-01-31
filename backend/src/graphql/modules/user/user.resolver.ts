@@ -50,11 +50,9 @@ export const userMutationsResolver = {
 
 export const userFeildsResolver = {
   User: {
-    generatedUrls: async (parent: any, _: any, ctx: GraphQLContext) => {
-      if (!parent.id) return null;
-      return ctx.prisma.generatedURL.findMany({
-        where: { userId: parent.id },
-      });
+    generatedUrls: async (parent: { id?: string }, _: unknown, ctx: GraphQLContext) => {
+      if (!parent.id) return [];
+      return ctx.loaders.generatedUrlsByUserId.load(parent.id);
     },
   },
 };
