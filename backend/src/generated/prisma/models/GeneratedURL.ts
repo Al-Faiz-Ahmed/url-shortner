@@ -42,6 +42,7 @@ export type GeneratedURLMinAggregateOutputType = {
   isBlock: boolean | null
   totalVisitors: number | null
   userId: string | null
+  expirationDate: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +55,7 @@ export type GeneratedURLMaxAggregateOutputType = {
   isBlock: boolean | null
   totalVisitors: number | null
   userId: string | null
+  expirationDate: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +68,7 @@ export type GeneratedURLCountAggregateOutputType = {
   isBlock: number
   totalVisitors: number
   userId: number
+  expirationDate: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -88,6 +91,7 @@ export type GeneratedURLMinAggregateInputType = {
   isBlock?: true
   totalVisitors?: true
   userId?: true
+  expirationDate?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +104,7 @@ export type GeneratedURLMaxAggregateInputType = {
   isBlock?: true
   totalVisitors?: true
   userId?: true
+  expirationDate?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -112,6 +117,7 @@ export type GeneratedURLCountAggregateInputType = {
   isBlock?: true
   totalVisitors?: true
   userId?: true
+  expirationDate?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -211,6 +217,7 @@ export type GeneratedURLGroupByOutputType = {
   isBlock: boolean
   totalVisitors: number
   userId: string
+  expirationDate: Date
   createdAt: Date
   updatedAt: Date
   _count: GeneratedURLCountAggregateOutputType | null
@@ -246,6 +253,7 @@ export type GeneratedURLWhereInput = {
   isBlock?: Prisma.BoolFilter<"GeneratedURL"> | boolean
   totalVisitors?: Prisma.IntFilter<"GeneratedURL"> | number
   userId?: Prisma.StringFilter<"GeneratedURL"> | string
+  expirationDate?: Prisma.DateTimeFilter<"GeneratedURL"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"GeneratedURL"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GeneratedURL"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -259,6 +267,7 @@ export type GeneratedURLOrderByWithRelationInput = {
   isBlock?: Prisma.SortOrder
   totalVisitors?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  expirationDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -275,6 +284,7 @@ export type GeneratedURLWhereUniqueInput = Prisma.AtLeast<{
   isBlock?: Prisma.BoolFilter<"GeneratedURL"> | boolean
   totalVisitors?: Prisma.IntFilter<"GeneratedURL"> | number
   userId?: Prisma.StringFilter<"GeneratedURL"> | string
+  expirationDate?: Prisma.DateTimeFilter<"GeneratedURL"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"GeneratedURL"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GeneratedURL"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -288,6 +298,7 @@ export type GeneratedURLOrderByWithAggregationInput = {
   isBlock?: Prisma.SortOrder
   totalVisitors?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  expirationDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.GeneratedURLCountOrderByAggregateInput
@@ -308,6 +319,7 @@ export type GeneratedURLScalarWhereWithAggregatesInput = {
   isBlock?: Prisma.BoolWithAggregatesFilter<"GeneratedURL"> | boolean
   totalVisitors?: Prisma.IntWithAggregatesFilter<"GeneratedURL"> | number
   userId?: Prisma.StringWithAggregatesFilter<"GeneratedURL"> | string
+  expirationDate?: Prisma.DateTimeWithAggregatesFilter<"GeneratedURL"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GeneratedURL"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GeneratedURL"> | Date | string
 }
@@ -319,6 +331,7 @@ export type GeneratedURLCreateInput = {
   uniqueHash: string
   isBlock?: boolean
   totalVisitors?: number
+  expirationDate?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutGeneratedUrlsInput
@@ -332,6 +345,7 @@ export type GeneratedURLUncheckedCreateInput = {
   isBlock?: boolean
   totalVisitors?: number
   userId: string
+  expirationDate?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -343,6 +357,7 @@ export type GeneratedURLUpdateInput = {
   uniqueHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBlock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totalVisitors?: Prisma.IntFieldUpdateOperationsInput | number
+  expirationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutGeneratedUrlsNestedInput
@@ -356,6 +371,7 @@ export type GeneratedURLUncheckedUpdateInput = {
   isBlock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totalVisitors?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  expirationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -368,6 +384,7 @@ export type GeneratedURLCreateManyInput = {
   isBlock?: boolean
   totalVisitors?: number
   userId: string
+  expirationDate?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -379,6 +396,7 @@ export type GeneratedURLUpdateManyMutationInput = {
   uniqueHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBlock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totalVisitors?: Prisma.IntFieldUpdateOperationsInput | number
+  expirationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -391,6 +409,7 @@ export type GeneratedURLUncheckedUpdateManyInput = {
   isBlock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totalVisitors?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  expirationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -413,6 +432,7 @@ export type GeneratedURLCountOrderByAggregateInput = {
   isBlock?: Prisma.SortOrder
   totalVisitors?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  expirationDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -429,6 +449,7 @@ export type GeneratedURLMaxOrderByAggregateInput = {
   isBlock?: Prisma.SortOrder
   totalVisitors?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  expirationDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -441,6 +462,7 @@ export type GeneratedURLMinOrderByAggregateInput = {
   isBlock?: Prisma.SortOrder
   totalVisitors?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  expirationDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -502,6 +524,7 @@ export type GeneratedURLCreateWithoutUserInput = {
   uniqueHash: string
   isBlock?: boolean
   totalVisitors?: number
+  expirationDate?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -513,6 +536,7 @@ export type GeneratedURLUncheckedCreateWithoutUserInput = {
   uniqueHash: string
   isBlock?: boolean
   totalVisitors?: number
+  expirationDate?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -554,6 +578,7 @@ export type GeneratedURLScalarWhereInput = {
   isBlock?: Prisma.BoolFilter<"GeneratedURL"> | boolean
   totalVisitors?: Prisma.IntFilter<"GeneratedURL"> | number
   userId?: Prisma.StringFilter<"GeneratedURL"> | string
+  expirationDate?: Prisma.DateTimeFilter<"GeneratedURL"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"GeneratedURL"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GeneratedURL"> | Date | string
 }
@@ -565,6 +590,7 @@ export type GeneratedURLCreateManyUserInput = {
   uniqueHash: string
   isBlock?: boolean
   totalVisitors?: number
+  expirationDate?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -576,6 +602,7 @@ export type GeneratedURLUpdateWithoutUserInput = {
   uniqueHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBlock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totalVisitors?: Prisma.IntFieldUpdateOperationsInput | number
+  expirationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -587,6 +614,7 @@ export type GeneratedURLUncheckedUpdateWithoutUserInput = {
   uniqueHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBlock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totalVisitors?: Prisma.IntFieldUpdateOperationsInput | number
+  expirationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -598,6 +626,7 @@ export type GeneratedURLUncheckedUpdateManyWithoutUserInput = {
   uniqueHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBlock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   totalVisitors?: Prisma.IntFieldUpdateOperationsInput | number
+  expirationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -612,6 +641,7 @@ export type GeneratedURLSelect<ExtArgs extends runtime.Types.Extensions.Internal
   isBlock?: boolean
   totalVisitors?: boolean
   userId?: boolean
+  expirationDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -625,6 +655,7 @@ export type GeneratedURLSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   isBlock?: boolean
   totalVisitors?: boolean
   userId?: boolean
+  expirationDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -638,6 +669,7 @@ export type GeneratedURLSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   isBlock?: boolean
   totalVisitors?: boolean
   userId?: boolean
+  expirationDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -651,11 +683,12 @@ export type GeneratedURLSelectScalar = {
   isBlock?: boolean
   totalVisitors?: boolean
   userId?: boolean
+  expirationDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type GeneratedURLOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "givenURL" | "generatedURL" | "uniqueHash" | "isBlock" | "totalVisitors" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["generatedURL"]>
+export type GeneratedURLOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "givenURL" | "generatedURL" | "uniqueHash" | "isBlock" | "totalVisitors" | "userId" | "expirationDate" | "createdAt" | "updatedAt", ExtArgs["result"]["generatedURL"]>
 export type GeneratedURLInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -679,6 +712,7 @@ export type $GeneratedURLPayload<ExtArgs extends runtime.Types.Extensions.Intern
     isBlock: boolean
     totalVisitors: number
     userId: string
+    expirationDate: Date
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["generatedURL"]>
@@ -1112,6 +1146,7 @@ export interface GeneratedURLFieldRefs {
   readonly isBlock: Prisma.FieldRef<"GeneratedURL", 'Boolean'>
   readonly totalVisitors: Prisma.FieldRef<"GeneratedURL", 'Int'>
   readonly userId: Prisma.FieldRef<"GeneratedURL", 'String'>
+  readonly expirationDate: Prisma.FieldRef<"GeneratedURL", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"GeneratedURL", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"GeneratedURL", 'DateTime'>
 }

@@ -25,11 +25,11 @@ model GeneratedURL {
   uniqueHash     String   @unique @map("unique_hash")
   isBlock        Boolean  @default(false) @map("is_block")
   totalVisitors  Int      @default(0) @map("total_visitors")
-
+  
   // Foreign key
   userId String @map("user_id")
   user   User  @relation(fields: [userId], references: [id])
-
+  expirationDate DateTime @default(dbgenerated("(now() + interval '7 days')")) @map("expiration_date")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

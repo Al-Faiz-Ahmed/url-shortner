@@ -3,6 +3,8 @@ import { GraphQLContext } from "../../context/context";
 import { GenUrlService } from "../../../services/gen-url.service";
 import { UserService } from "../../../services/user.service";
 import { CatchPrismaError } from "../../../error/prisma.error";
+import { vGenUniqueUrl } from "../../../validations/models/gen-url-validation";
+import { ValidationError } from "../../../error/app.error";
 
 export const genUrlQueriesResolver = {
   getAllUrl: async (
@@ -28,11 +30,21 @@ export const genUrlMutationsResolver = {
     context: GraphQLContext,
   ) => {
     // let { userId } = payload.input;
-
     let userId = payload.input.userId || "";
+
+    const response = vGenUniqueUrl.safeParse({ ...payload.input, userId });
+
+    if (response.success === false) {
+      const schemaErr =
+        response.error.issues[0]?.message || "Error found in schema";
+
+      return ValidationError(schemaErr);
+    }
+
     try {
       if (!userId) {
-        userId = (await UserService.createUser(context)).id;
+        const user = await UserService.createUser(context);
+        if (user) userId = user.id;
       }
 
       const generatedURL = await GenUrlService.generateUniqueURL(

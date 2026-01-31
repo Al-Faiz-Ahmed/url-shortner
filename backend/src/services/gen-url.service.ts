@@ -21,19 +21,13 @@ export class GenUrlService {
     });
     return record.givenURL;
   }
+
   public static async generateUniqueURL(
     payload: IGenUniqueUrl & { userId: string },
     context: GraphQLContext,
   ) {
     const { prisma } = context;
-    const response = vGenUniqueUrl.safeParse({ ...payload });
-
-    if (response.success === false) {
-      const schemaErr =
-        response.error.issues[0]?.message || "Error found in schema";
-
-      throw ValidationError(schemaErr);
-    }
+    
 
     try {
       const newGeneratedUrl = `${envConfig.PUBLIC_SITE_URL}/${payload.uniqueHash}`;
@@ -50,6 +44,7 @@ export class GenUrlService {
     } catch (err) {
       console.log("Error from Generate Unique URL", err);
       CatchPrismaError(err);
+   
     }
   }
 
@@ -59,7 +54,7 @@ export class GenUrlService {
   ) {
     const { prisma } = context;
     if (!userId) {
-      throw ValidationError("user Id is required to find Generated URL Data");
+      return ValidationError("user Id is required to find Generated URL Data");
     }
 
     return prisma.generatedURL.findMany({

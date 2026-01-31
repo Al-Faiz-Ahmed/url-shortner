@@ -89,6 +89,7 @@ export const GeneratedURLScalarFieldEnum = {
   isBlock: 'isBlock',
   totalVisitors: 'totalVisitors',
   userId: 'userId',
+  expirationDate: 'expirationDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

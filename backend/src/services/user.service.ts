@@ -1,7 +1,6 @@
 import { ValidationError } from "../error/app.error";
 import { CatchPrismaError } from "../error/prisma.error";
 import type { GraphQLContext } from "../graphql/context/context";
-import { getClientIp } from "../lib/utils/get-IpAddress";
 // import { ICreateUser } from "../types/models";
 // import { vCreateUser } from "../validations/models/user-validation";
 
@@ -17,22 +16,22 @@ export class UserService {
     } catch (err) {
       console.log("Error from Creating User", err);
       CatchPrismaError(err);
+      
     }
   }
   public static async createUser(context: GraphQLContext) {
-    const { prisma, req } = context;
-
-    const clientIpAddress = getClientIp(req) || "";
+    const { prisma, clientIp } = context;
 
     try {
       return prisma.user.create({
         data: {
-          ipAddress: clientIpAddress,
+          ipAddress: clientIp,
         },
       });
     } catch (err) {
       console.log("Error from Creating User", err);
       CatchPrismaError(err);
+      
     }
   }
 
