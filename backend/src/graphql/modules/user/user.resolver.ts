@@ -1,18 +1,31 @@
-import { NotFoundError } from "../../../error/app.error";
+import { NotFoundError, ValidationError } from "../../../error/app.error";
 import { UserService } from "../../../services/user.service";
+import { vUserUUID } from "../../../validations/models/user-validation";
 import { GraphQLContext } from "../../context/context";
 // import { ICreateUser,  IDeleteUser,  IUpdateUser } from "./types";
 // import UserService from "./user.services";
 
 export const userQueriesResolver = {
-  getUser: async (_: unknown, { userId }: { userId: string }, context: GraphQLContext) => {
-     const result = await UserService.getUserById(userId,context)
-     if(!result){
-      throw NotFoundError("User not Found regarding your id",{userId})
-     }
-     return result
+  getUser: async (
+    _: unknown,
+    { userId }: { userId: string },
+    context: GraphQLContext,
+  ) => {
+    const response = vUserUUID.safeParse({ userId });
+
+    if (response.success === false) {
+      const schemaErr =
+        response.error.issues[0]?.message || "Error found in schema";
+      return ValidationError(schemaErr);
+    }
+
+    const user = await UserService.getUserById(userId, context);
+    if (!userId) {
+      throw NotFoundError("User not Found regarding your id", { userId });
+    }
+    return user;
   },
-  
+
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
 };
 
@@ -44,13 +57,17 @@ export const userMutationsResolver = {
   //     const res = await UserService.deleteUser(payload);
   //     return "User Successfully Deleted";
   //   },
-  
+
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
 };
 
 export const userFeildsResolver = {
   User: {
-    generatedUrls: async (parent: { id?: string }, _: unknown, ctx: GraphQLContext) => {
+    generatedUrls: async (
+      parent: { id?: string },
+      _: unknown,
+      ctx: GraphQLContext,
+    ) => {
       if (!parent.id) return [];
       return ctx.loaders.generatedUrlsByUserId.load(parent.id);
     },

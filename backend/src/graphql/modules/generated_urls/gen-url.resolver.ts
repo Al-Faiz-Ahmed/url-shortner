@@ -4,9 +4,11 @@ import { GenUrlService } from "../../../services/gen-url.service";
 import { UserService } from "../../../services/user.service";
 import { CatchPrismaError } from "../../../error/prisma.error";
 import { vGenUniqueUrl } from "../../../validations/models/gen-url-validation";
-import { ValidationError } from "../../../error/app.error";
+import { NotFoundError, ValidationError } from "../../../error/app.error";
+import { vUserUUID } from "../../../validations/models/user-validation";
 
 export const genUrlQueriesResolver = {
+
   getAllUrl: async (
     _: unknown,
     { userId }: { userId: string },
@@ -14,6 +16,20 @@ export const genUrlQueriesResolver = {
   ) => {
     if (!userId) return null;
     try {
+      const response = vUserUUID.safeParse({ userId });
+
+      if (response.success === false) {
+        const schemaErr =
+          response.error.issues[0]?.message || "Error found in schema";
+        return ValidationError(schemaErr);
+      }
+
+
+      const user = await UserService.getUserById(userId,context)
+      if(!user){
+        return NotFoundError("No User Found Regarding this id",{userId})
+      }
+
       return await GenUrlService.getAllUrlById(userId, context);
     } catch (err) {
       console.log("Error from getAllUrlQueryResolver", err);
@@ -37,7 +53,6 @@ export const genUrlMutationsResolver = {
     if (response.success === false) {
       const schemaErr =
         response.error.issues[0]?.message || "Error found in schema";
-
       return ValidationError(schemaErr);
     }
 

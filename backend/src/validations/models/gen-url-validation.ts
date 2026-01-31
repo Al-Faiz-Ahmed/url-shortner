@@ -7,5 +7,6 @@ export const vGenUniqueUrl = z.object({
     .string()
     .min(5, "Unique Hash Character Length Should be 5")
     .max(5, "Unique Hash Character Length Should be 5"),
-  userId: z.string().optional()
+  userId: z.uuid().optional()
 }) satisfies z.ZodType<IGenUniqueUrl>;
+
