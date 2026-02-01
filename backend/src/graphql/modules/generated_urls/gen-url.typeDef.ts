@@ -18,6 +18,12 @@ export const  genUrlTypeDefs = gql`
     updatedAt: DateTime!
   }
 
+  type UniqueHashAvailability {
+    uniqueHash: String!
+    available: Boolean!
+    message: String!
+  }
+
   input genUniqueUrlInput {
     givenURL: String!
     uniqueHash: String!

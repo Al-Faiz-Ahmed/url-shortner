@@ -8,7 +8,6 @@ import { NotFoundError, ValidationError } from "../../../error/app.error";
 import { vUserUUID } from "../../../validations/models/user-validation";
 
 export const genUrlQueriesResolver = {
-
   getAllUrl: async (
     _: unknown,
     { userId }: { userId: string },
@@ -24,10 +23,9 @@ export const genUrlQueriesResolver = {
         return ValidationError(schemaErr);
       }
 
-
-      const user = await UserService.getUserById(userId,context)
-      if(!user){
-        return NotFoundError("No User Found Regarding this id",{userId})
+      const user = await UserService.getUserById(userId, context);
+      if (!user) {
+        return NotFoundError("No User Found Regarding this id", { userId });
       }
 
       return await GenUrlService.getAllUrlById(userId, context);
@@ -35,6 +33,14 @@ export const genUrlQueriesResolver = {
       console.log("Error from getAllUrlQueryResolver", err);
       CatchPrismaError(err);
     }
+  },
+
+  findUniqueHashRecord: async (
+    _: unknown,
+    { uniqueHash }: { uniqueHash: string },
+    context: GraphQLContext,
+  ) => {
+    return await GenUrlService.findUniqueHashRecord(uniqueHash, context);
   },
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
 };
@@ -45,7 +51,6 @@ export const genUrlMutationsResolver = {
     payload: { input: IGenUniqueUrl },
     context: GraphQLContext,
   ) => {
-    // let { userId } = payload.input;
     let userId = payload.input.userId || "";
 
     const response = vGenUniqueUrl.safeParse({ ...payload.input, userId });
