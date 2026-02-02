@@ -52,15 +52,16 @@ export const genUrlMutationsResolver = {
     payload: { input: IGenUniqueUrl },
     context: GraphQLContext,
   ) => {
-    let userId = payload.input.userId || "";
+    
 
-    const response = vGenUniqueUrl.safeParse({ ...payload.input, userId });
+    const response = vGenUniqueUrl.safeParse({ ...payload.input });
 
     if (response.success === false) {
       const schemaErr =
         response.error.issues[0]?.message || "Error found in schema";
       return ValidationError(schemaErr);
     }
+    let userId = payload.input.userId || "";
 
     try {
       if (!userId) {
