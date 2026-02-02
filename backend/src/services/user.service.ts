@@ -19,6 +19,25 @@ export class UserService {
       
     }
   }
+
+  public static async getUserByIpAddress(
+    ipAddress: string,
+    context: GraphQLContext,
+  ) {
+    const { prisma } = context;
+    if (!ipAddress) return null;
+    try {
+      return prisma.user.findFirst({
+        where: {
+          ipAddress,
+        },
+      });
+    } catch (err) {
+      console.log("Error from getUserByIpAddress", err);
+      CatchPrismaError(err);
+    }
+  }
+
   public static async createUser(context: GraphQLContext) {
     const { prisma, clientIp } = context;
 

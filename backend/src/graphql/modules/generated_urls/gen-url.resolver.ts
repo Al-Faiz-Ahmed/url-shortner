@@ -46,6 +46,7 @@ export const genUrlQueriesResolver = {
 };
 
 export const genUrlMutationsResolver = {
+
   generateUniqueURL: async (
     _: unknown,
     payload: { input: IGenUniqueUrl },
@@ -63,8 +64,16 @@ export const genUrlMutationsResolver = {
 
     try {
       if (!userId) {
-        const user = await UserService.createUser(context);
-        if (user) userId = user.id;
+        const userByIp = await UserService.getUserByIpAddress(
+          context.clientIp,
+          context,
+        );
+        if (userByIp) {
+          userId = userByIp.id;
+        } else {
+          const user = await UserService.createUser(context);
+          if (user) userId = user.id;
+        }
       }
 
       const generatedURL = await GenUrlService.generateUniqueURL(
