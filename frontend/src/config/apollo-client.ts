@@ -12,22 +12,27 @@ import { envConfig } from "./env-config";
 
 // 1. Error Handling Link (Production best practice)
 const errorLink = new ErrorLink(({ error, operation }) => {
+  // Use operation for context: which query/mutation failed and with what variables
+  const opName = operation.operationName ?? "Unknown";
+  const variables = operation.variables;
+  const context = `[${opName}]${Object.keys(variables).length ? ` vars: ${JSON.stringify(variables)}` : ""}`;
+
   if (CombinedGraphQLErrors.is(error)) {
     error.errors.forEach(({ message, locations, path }) =>
       console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+        `[GraphQL error] ${context} — Message: ${message}, Location: ${locations}, Path: ${path}`,
       ),
     );
   } else if (CombinedProtocolErrors.is(error)) {
     error.errors.forEach(({ message, extensions }) =>
       console.log(
-        `[Protocol error]: Message: ${message}, Extensions: ${JSON.stringify(
+        `[Protocol error] ${context} — Message: ${message}, Extensions: ${JSON.stringify(
           extensions,
         )}`,
       ),
     );
   } else {
-    console.error(`[Network error]: ${error}`);
+    console.error(`[Network error] ${context} — ${error}`);
   }
 });
 
