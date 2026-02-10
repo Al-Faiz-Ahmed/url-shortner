@@ -17,37 +17,72 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  /* Your Dark Theme Colors */
+  --color-background: oklch(0.1552 0.0192 247.12);  /* #060D14 */
+  --color-foreground: oklch(1 0 0);  /* #ffffff */
+  
+  --color-card: oklch(0.15 0.02 250);  /* Slightly lighter than background */
+  --color-card-foreground: oklch(1 0 0);
+
+  --color-popover: oklch(0.13 0.02 250);
+  --color-popover-foreground: oklch(1 0 0);
+
+  
+  --color-primary-foreground: oklch(0.1552 0.0192 247.12);  /* Dark text on primary */
+
+  --color-secondary: oklch(0.2 0.02 250);  /* Darker shade for secondary */
+  --color-secondary-foreground: oklch(1 0 0);
+
+  --color-muted: oklch(0.18 0.02 250);
+  --color-muted-foreground: oklch(0.65 0.01 250);  /* Muted white/gray */
+
+  --color-accent: oklch(0.22 0.02 250);
+  --color-accent-foreground: oklch(0.8401 0.1475 80.45);  /* Primary color for accent text */
+
+  --color-destructive: oklch(0.55 0.22 25);  /* Red for errors */
+  --color-destructive-foreground: oklch(1 0 0);
+
+  --color-border: oklch(0.25 0.02 250);
+  --color-input: oklch(0.18 0.02 250);
+  --color-ring: oklch(0.8401 0.1475 80.45);  /* Primary color for focus rings */
+
+  /* Chart colors with your primary */
+  --color-chart-1: oklch(0.8401 0.1475 80.45);   /* Your primary */
+  --color-chart-2: oklch(0.6 0.15 200);   /* Blue */
+  --color-chart-3: oklch(0.65 0.18 140);  /* Green */
+  --color-chart-4: oklch(0.75 0.12 40);   /* Orange */
+  --color-chart-5: oklch(0.55 0.2 310);   /* Purple */
+
+  /* Sidebar colors */
+  --color-sidebar: oklch(0.13 0.02 250);
+  --color-sidebar-foreground: oklch(1 0 0);
+  --color-sidebar-primary: oklch(0.8401 0.1475 80.45);
+  --color-sidebar-primary-foreground: oklch(0.1552 0.0192 247.12);
+  --color-sidebar-accent: oklch(0.2 0.02 250);
+  --color-sidebar-accent-foreground: oklch(1 0 0);
+  --color-sidebar-border: oklch(0.25 0.02 250);
+  --color-sidebar-ring: oklch(0.8401 0.1475 80.45);
+
+
+   /* Primary color variants */
+   --color-primary-50: oklch(0.9434 0.0552 84);   /* Very light */
+   --color-primary-100: oklch(0.9233 0.0747 83.19);
+   --color-primary-200: oklch(0.9035 0.0945 82.82);
+   --color-primary-300: oklch(0.8651 0.1293 81.92);
+   --color-primary-400: oklch(0.8401 0.1475 80.45);  /* Main #FCBF49 */
+   --color-primary-500: oklch(0.6592 0.1147 79.46);  /* Darker */
+   --color-primary-600: oklch(0.4635 0.0788 78.17);
+   --color-primary-700: oklch(0.3942 0.0662 76.93);
+   --color-primary-800: oklch(0.3329 0.0547 76.54);
+   --color-primary-900: oklch(0.2648 0.0415 74.72);   /* Very dark */
+
+   --font-short-stack: "Short Stack", cursive, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+   Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+   sans-serif ;
+   --font-sans: "Short Stack", cursive, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+   Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+   sans-serif;
+  
 }
 
 a {
