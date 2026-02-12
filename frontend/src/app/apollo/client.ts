@@ -8,7 +8,7 @@ import {
   CombinedProtocolErrors,
 } from "@apollo/client";
 import { ErrorLink } from "@apollo/client/link/error";
-import { envConfig } from "./env-config";
+import { envConfig } from "@/config/env-config";
 
 // 1. Error Handling Link (Production best practice)
 const errorLink = new ErrorLink(({ error, operation }) => {
