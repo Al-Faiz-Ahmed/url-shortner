@@ -13,7 +13,7 @@ export function Header({ className }: HeaderProps) {
     <header
       className={cn(
         "w-full",
-        "text-sm text-muted-foreground",
+        "text-sm text-muted-foreground font-sans",
         className,
       )}
     >

@@ -4,7 +4,7 @@ import { ShortUrlForm } from "@/components/forms/ShortUrlForm";
 export function Home() {
   return (
     <div>
-      <Header className="-mt-8 md:-mt-12" />
+      <Header />
 
       {/* <section className="flex flex-col items-center gap-8 text-center">
         <ShortUrlForm />

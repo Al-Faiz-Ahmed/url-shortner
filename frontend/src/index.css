@@ -3,9 +3,6 @@
 @import "shadcn/tailwind.css";
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
 
   color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
@@ -65,44 +62,12 @@
 
   --font-short-stack: "Short Stack", cursive, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  --font-sans: "Short Stack", cursive, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+  --font-sans: system-ui, Avenir, Helvetica, Arial,-apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
 
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
 
 
 
@@ -158,6 +123,9 @@ button:focus-visible {
   --color-primary-700: oklch(0.3942 0.0662 76.93);
   --color-primary-800: oklch(0.3329 0.0547 76.54);
   --color-primary-900: oklch(0.2648 0.0415 74.72);
+
+  --font-short-stack:var(--font-short-stack);
+  --font-sans:var(--font-sans);
 }
 
 @layer base {
@@ -168,6 +136,10 @@ button:focus-visible {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground flex flex-col min-h-dvh;
+    @apply bg-background text-foreground flex flex-col min-h-dvh font-short-stack;
   }
+  
+ 
+  
+  
 }
