@@ -1,11 +1,13 @@
 
-function App() {
+import { Home } from "@/pages/Home";
+import Providers from "./providers";
 
+function App() {
   return (
-    <div>
-      faizan
-    </div>
-  )
+    <Providers>
+      <Home />
+    </Providers>
+  );
 }
 
-export default App
+export default App;

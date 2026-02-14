@@ -15,7 +15,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "formik": "^2.4.9",
-    "formik-validator-zod": "^2.2.0",
     "graphql": "^16.12.0",
     "lucide-react": "^0.563.0",
     "next-themes": "^0.4.6",
@@ -26,7 +25,8 @@
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "zod-formik-adapter": "^2.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
