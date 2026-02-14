@@ -3,9 +3,9 @@ import { useMutation } from "@apollo/client/react";
 
 
 
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/Card";
-import { FormField } from "@/components/ui/FormField";
+// import { FormField } from "@/components/ui/FormField";
 import { CREATE_SHORT_URL_MUTATION } from "@/graphql/mutations/createShortUrl";
 import type {
   CreateShortUrlResponse,
@@ -33,7 +33,28 @@ export function ShortUrlForm() {
     CreateShortUrlVariables
   >(CREATE_SHORT_URL_MUTATION);
 
-  const latest = items.length ? items[items.length - 1] : undefined;
+const onFormSubmit = async (values:any, helpers:any) => {
+  console.log({values,helpers,loading,items})
+  const { resetForm, setStatus } = helpers;
+  setStatus({});
+
+  try {
+    const { data } = await createShortUrl({
+      variables: { url: values.url },
+    });
+
+    if (data?.createShortUrl) {
+      const payload = data.createShortUrl;
+      setItems((prev) => [...prev, payload]);
+      resetForm();
+    }
+  } catch (error:any) {
+    // const message = graphqlErrorHandler(error);
+    setStatus({ error: error ? error.message : "" });
+  }
+}
+
+  // const latest = items.length ? items[items.length - 1] : undefined;
 
   return (
     <Card>
@@ -52,25 +73,7 @@ export function ShortUrlForm() {
       <Formik<ShortUrlFormValues, FormStatus>
         initialValues={{ url: "" }}
         validationSchema={toFormikValidate(shortUrlSchema)}
-        onSubmit={async (values, helpers) => {
-          const { resetForm, setStatus } = helpers;
-          setStatus({});
-
-          try {
-            const { data } = await createShortUrl({
-              variables: { url: values.url },
-            });
-
-            if (data?.createShortUrl) {
-              const payload = data.createShortUrl;
-              setItems((prev) => [...prev, payload]);
-              resetForm();
-            }
-          } catch (error:any) {
-            // const message = graphqlErrorHandler(error);
-            setStatus({ error: error ? error.message : "" });
-          }
-        }}
+        onSubmit={onFormSubmit}
       >
         {({status}) => (
           <Form className="space-y-4">
