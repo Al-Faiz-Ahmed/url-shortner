@@ -15,7 +15,7 @@ import type {
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { shortUrlSchema, type ShortUrlFormValues } from "@/schemas/shortUrl.schema";
 import { STORAGE_KEYS } from "@/utils/constants";
-import type { ShortUrl } from "@/types";
+import type { GeneratedURL } from "@/types";
 import { toFormikValidate } from "zod-formik-adapter";
 
 type FormStatus = {
@@ -23,7 +23,7 @@ type FormStatus = {
 };
 
 export function ShortUrlForm() {
-  const [items, setItems] = useLocalStorage<ShortUrl[]>(
+  const [items, setItems] = useLocalStorage<GeneratedURL[]>(
     STORAGE_KEYS.SHORTENED_URLS,
     [],
   );

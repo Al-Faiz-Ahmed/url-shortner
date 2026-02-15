@@ -1,5 +1,4 @@
-// import { User } from "../../generated/prisma/client";
-// import { User } from "../../generated/prisma/browser";
+
 
 import { GeneratedURL,User } from "../../generated/prisma/client";
 
