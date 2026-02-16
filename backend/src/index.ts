@@ -38,7 +38,11 @@ app.get("/*splat", async (req: Request, res: Response) => {
   res.redirect(302, originalUrl);
 });
 
-app.listen(envConfig.PORT,"0.0.0.0", () => {
-  console.log(`Server Started on http://localhost:${envConfig.PORT}`);
-});
+
+// prevent this from vercel deployment
+if (process.env.NODE_ENV !== "production") {
+  app.listen(envConfig.PORT,"0.0.0.0", () => {
+    console.log(`Server Started on http://localhost:${envConfig.PORT}`);
+  });
+}
 
