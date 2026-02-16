@@ -51,7 +51,7 @@ export function FormField({
       <p
         id={`${fieldId}-error`}
         className={cn(
-          "min-h-[1.25rem] text-xs md:text-sm text-destructive",
+          "min-h-5 text-xs md:text-sm text-destructive",
           !hasError && "opacity-0",
         )}
         aria-live="polite"

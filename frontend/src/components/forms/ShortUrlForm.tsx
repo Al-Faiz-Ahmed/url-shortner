@@ -1,9 +1,6 @@
 import { Form, Formik } from "formik";
 import { useMutation } from "@apollo/client/react";
 
-// import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/Card";
-// import { FormField } from "@/components/ui/FormField";
 import { CREATE_SHORT_URL_MUTATION } from "@/graphql/mutations/createShortUrl";
 import type {
   CreateShortUrlResponse,
@@ -19,7 +16,6 @@ import { STORAGE_KEYS } from "@/utils/constants";
 import type { GeneratedURL } from "@/types";
 import { toFormikValidate } from "zod-formik-adapter";
 import { Input } from "../ui/input";
-import { FormField } from "../ui/FormField";
 
 type FormStatus = {
   error?: string;
