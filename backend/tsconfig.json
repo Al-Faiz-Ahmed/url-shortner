@@ -2,10 +2,10 @@
     "compilerOptions": {
       "rootDir": "./src",
       "outDir": "./build",
-      "module": "ES2022",
-      "target": "ES2022",
+      "module": "CommonJS",
+      "target": "ES2019",
       "lib": [
-        "ES2022"
+        "ES2019"
       ],
       "moduleResolution": "node",
       "sourceMap": false,
