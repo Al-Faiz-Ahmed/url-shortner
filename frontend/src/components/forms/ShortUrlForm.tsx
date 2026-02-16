@@ -16,6 +16,7 @@ import { STORAGE_KEYS } from "@/utils/constants";
 import type { GeneratedURL } from "@/types";
 import { toFormikValidate } from "zod-formik-adapter";
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 type FormStatus = {
   error?: string;
@@ -56,17 +57,22 @@ export function ShortUrlForm() {
   // const latest = items.length ? items[items.length - 1] : undefined;
 
   return (
+    <div className="w-full max-w-2xl">
+
+    
     <Formik<ShortUrlFormValues, FormStatus>
       initialValues={{ url: "" }}
       validationSchema={toFormikValidate(shortUrlSchema)}
       onSubmit={onFormSubmit}
+      
     >
       {({ status }) => (
-        <Form className="space-y-4">
+        <Form className="space-y-4 w-full ">
           <div className="flex flex-col gap-3 md:flex-row">
-            <div className="flex-1">
-              <Input placeholder="Paste URL here" aria-invalid />
+            <div className="flex-1 ">
+              <Input placeholder="Paste URL here" size="xs" />
             </div>
+            <Button className="px-6" size="sm">Tinify</Button>
           </div>
 
           {status?.error && (
@@ -74,8 +80,11 @@ export function ShortUrlForm() {
               {status.error}
             </p>
           )}
+
+          
         </Form>
       )}
     </Formik>
+    </div>
   );
 }

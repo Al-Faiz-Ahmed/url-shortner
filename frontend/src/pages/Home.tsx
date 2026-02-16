@@ -6,7 +6,7 @@ export function Home() {
     <div>
       <Header />
 
-      <section className="flex flex-col items-center gap-8 text-center">
+      <section className="flex flex-col items-center gap-8 text-center bg-red">
         <div className="space-y-4 text-center mb-6 md:mb-8">
           <p className="text-foreground text-xl md:text-2xl">
             Get rid of your LOOOOOONG url !
@@ -17,7 +17,7 @@ export function Home() {
         </div>
         <ShortUrlForm />
 
-        <p className="text-md md:text-lg leading-relaxed text-muted-foreground/80 w-fit mx-auto">
+        <p className="text-md md:text-lg leading-relaxed text-muted-foreground/80 w-fit mx-auto mt-4">
           Create your first <span className="text-primary">Tini Tiny{" "}</span>
           URL from here <br /> and share with 8,300,000,000 billion people <br /> around the
           globe.
