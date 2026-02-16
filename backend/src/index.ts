@@ -39,6 +39,7 @@ app.get("/*splat", async (req: Request, res: Response) => {
 });
 
 
+
 // prevent this from vercel deployment
 if (process.env.NODE_ENV !== "production") {
   app.listen(envConfig.PORT,"0.0.0.0", () => {
@@ -46,3 +47,5 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
+
+export default app;
