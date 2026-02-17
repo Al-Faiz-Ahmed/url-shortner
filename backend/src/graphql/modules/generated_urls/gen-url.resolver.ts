@@ -22,11 +22,10 @@ export const genUrlQueriesResolver = {
       if (userByIp) {
         userId = userByIp.id;
       }else{
-        return ValidationError("Invalid UUID")
+        return NotFoundError("URL not Found regarding your user id", { userId })
       }
     }
 
-    // if (!userId) return null;
     try {
       const response = vUserUUID.safeParse({ userId });
 

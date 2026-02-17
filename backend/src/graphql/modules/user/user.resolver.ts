@@ -8,9 +8,23 @@ import { GraphQLContext } from "../../context/context";
 export const userQueriesResolver = {
   getUser: async (
     _: unknown,
-    { userId }: { userId: string },
+    { userId }: { userId?: string },
     context: GraphQLContext,
   ) => {
+
+
+    if (!userId) {
+      const userByIp = await UserService.getUserByIpAddress(
+        context.clientIp,
+        context,
+      );
+      if (userByIp) {
+        userId = userByIp.id;
+      }else{
+        return NotFoundError("User not Found regarding your id", { userId })
+      }
+    }
+
     const response = vUserUUID.safeParse({ userId });
 
     if (response.success === false) {
