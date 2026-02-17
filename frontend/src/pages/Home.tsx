@@ -1,5 +1,6 @@
-import { Header } from "@/components/layout/Header";
-import { ShortUrlForm } from "@/components/forms/ShortUrlForm";
+import { Header } from "@/components/layout/header";
+import { ShortUrlForm } from "@/components/forms/short-url-form";
+import GeneratedUrlSection from "@/components/common/urls-sectiont";
 
 export function Home() {
   return (
@@ -17,11 +18,9 @@ export function Home() {
         </div>
         <ShortUrlForm />
 
-        <p className="text-md md:text-lg leading-relaxed text-muted-foreground/80 w-fit mx-auto mt-4">
-          Create your first <span className="text-primary">Tini Tiny{" "}</span>
-          URL from here <br /> and share with 8,300,000,000 billion people <br /> around the
-          globe.
-        </p>
+        <GeneratedUrlSection />
+
+        
       </section>
     </div>
   );

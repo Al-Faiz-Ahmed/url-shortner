@@ -11,7 +11,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import {
   shortUrlSchema,
   type ShortUrlFormValues,
-} from "@/schemas/shortUrl.schema";
+} from "@/schemas/short-url.schema";
 import { STORAGE_KEYS } from "@/utils/constants";
 import type { GeneratedURL } from "@/types";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -68,7 +68,7 @@ export function ShortUrlForm() {
         validationSchema={toFormikValidationSchema(shortUrlSchema)}
         onSubmit={onFormSubmit}
         validateOnChange={true}
-        validateOnBlur={true}
+        validateOnBlur={false}
       >
         {({ status, values, errors, touched }) => (
           <Form className="space-y-4 w-full ">

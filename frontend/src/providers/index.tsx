@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import ErrorBoundaryProvider from "./ErrorBoundaryProvider";
-import ApolloProviderBase from "./ApolloProvider";
+import ErrorBoundaryProvider from "./error-bndry-provider";
+import ApolloProviderBase from "./apollo-provider";
 
 const Providers = ({ children }: { children: Readonly<ReactNode> }) => {
   return (

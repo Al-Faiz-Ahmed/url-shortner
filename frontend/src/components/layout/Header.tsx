@@ -1,4 +1,4 @@
-import { SocialLinks } from "@/components/shared/SocialLinks";
+import { SocialLinks } from "@/components/shared/social-links";
 import { cn } from "@/lib/utils";
 
 type HeaderProps = {

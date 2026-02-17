@@ -5,7 +5,7 @@ export function SocialLinks() {
       className="flex items-center gap-3 justify-end pt-2 pr-2"
     >
       <a
-        href="https://github.com/Al-Faiz-Ahmed/url-shortner"
+        href="https://al-faiz.website"
         target="_blank"
         referrerPolicy="no-referrer"
         rel="noreferrer"
@@ -18,7 +18,7 @@ export function SocialLinks() {
           />
       </a>
       <a
-        href="https://al-faiz.website"
+        href="https://github.com/Al-Faiz-Ahmed/url-shortner"
         target="_blank"
         referrerPolicy="no-referrer"
         rel="noreferrer"
