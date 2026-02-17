@@ -13,7 +13,20 @@ export const genUrlQueriesResolver = {
     { userId }: { userId: string },
     context: GraphQLContext,
   ) => {
-    if (!userId) return null;
+
+    if (!userId) {
+      const userByIp = await UserService.getUserByIpAddress(
+        context.clientIp,
+        context,
+      );
+      if (userByIp) {
+        userId = userByIp.id;
+      }else{
+        return ValidationError("Invalid UUID")
+      }
+    }
+
+    // if (!userId) return null;
     try {
       const response = vUserUUID.safeParse({ userId });
 
@@ -46,14 +59,11 @@ export const genUrlQueriesResolver = {
 };
 
 export const genUrlMutationsResolver = {
-
   generateUniqueURL: async (
     _: unknown,
     payload: { input: IGenUniqueUrl },
     context: GraphQLContext,
   ) => {
-    
-
     const response = vGenUniqueUrl.safeParse({ ...payload.input });
 
     if (response.success === false) {
