@@ -10,6 +10,7 @@ const ipAddressMiddleware = (req: Request, res: Response, next: NextFunction) =>
   if (!existing) {
     const ip = req.ip ?? req.socket?.remoteAddress ?? "";
     (req.headers as Record<string, string>)["x-real-ip"] = String(ip);
+    console.log(String(ip), "From ip-address")
   }
   next();
 };

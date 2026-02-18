@@ -32,8 +32,8 @@ export const userQueriesResolver = {
         response.error.issues[0]?.message || "Error found in schema";
       return ValidationError(schemaErr);
     }
-
-    const user = await UserService.getUserById(userId, context);
+    
+    const user = await UserService.getUserById(userId || "", context);
     if (!userId) {
       throw NotFoundError("User not Found regarding your id", { userId });
     }

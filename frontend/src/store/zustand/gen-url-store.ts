@@ -1,12 +1,13 @@
 // src/store/urlStore.ts
 
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools,persist } from "zustand/middleware";
 import type { UrlState } from "./store.types";
 
 export const useUrlStore = create<UrlState>()(
   devtools(
-    (set) => ({
+    persist(
+      (set) => ({
       // Initial State
       generatedURLs: [],
       selectedUrls:[],
@@ -66,6 +67,13 @@ export const useUrlStore = create<UrlState>()(
      
 
     }),
+    {
+      name: "url-storage", // localStorage key
+      partialize: (state) => ({
+        generatedURLs: state.generatedURLs,
+      }), // only persist these fields
+    }
+  ),
     { name: "UrlStore" },
   ),
 );
