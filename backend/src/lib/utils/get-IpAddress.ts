@@ -7,10 +7,16 @@
  */
 export function getClientIp(req: Request): string | null {
   const xff = req.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0]?.trim() ?? null;
+  if (xff) {
+    
+    console.log(xff, "ip address from context")
+    return xff.split(",")[0]?.trim() ?? null};
+    
+    const xRealIp = req.headers.get("x-real-ip");
+    if (xRealIp) return {
+    console.log(xRealIp, "ip address from context")
+    xRealIp.trim()};
 
-  const xRealIp = req.headers.get("x-real-ip");
-  if (xRealIp) return xRealIp.trim();
 
   return null;
 }
