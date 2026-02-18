@@ -19,20 +19,14 @@ export interface UserState {
 
 export interface UrlState {
   generatedURLs: GeneratedURL[];
-  selectedUrl: GeneratedURL | null;
-  isLoading: boolean;
-  error: string | null;
-  totalCount: number;
+  selectedUrls: string[];
+  
 
   // Actions
     setUrls: (urls: GeneratedURL[]) => void;
     addUrl: (url: GeneratedURL) => void;
     removeUrl: (id: string) => void;
     updateUrl: (id: string, updates: Partial<GeneratedURL>) => void;
-    setSelectedUrl: (url: GeneratedURL | null) => void;
-    setLoading: (loading: boolean) => void;
-    setError: (error: string | null) => void;
-    fetchUrls: () => Promise<void>;
-    createUrl: (originalUrl: string) => Promise<void>;
-    deleteUrl: (id: string) => Promise<void>;
+    setSelectedUrls: (url: string[]) => void;
+   
 }
