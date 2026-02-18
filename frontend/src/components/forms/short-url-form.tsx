@@ -7,7 +7,7 @@ import type {
   CreateShortUrlVariables,
 } from "@/graphql/mutations/createShortUrl";
 // import { graphqlErrorHandler } from "@/graphql/errors/graphqlErrorHandler";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 import {
   shortUrlSchema,
   type ShortUrlFormValues,
