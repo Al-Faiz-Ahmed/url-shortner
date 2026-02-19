@@ -16,6 +16,7 @@ export const  genUrlTypeDefs = gql`
     userId: String!    
     createdAt: DateTime!
     updatedAt: DateTime!
+    expirationDate: DateTime!
   }
 
   type UniqueHashAvailability {

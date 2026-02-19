@@ -1,62 +1,86 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, type FormikHelpers } from "formik";
 import { useMutation } from "@apollo/client/react";
 
-import { CREATE_SHORT_URL_MUTATION } from "@/graphql/mutations/createShortUrl";
+import { CREATE_SHORT_URL_MUTATION } from "@/graphql/mutations/gen-short-url";
 import type {
   CreateShortUrlResponse,
   CreateShortUrlVariables,
-} from "@/graphql/mutations/createShortUrl";
+} from "@/graphql/mutations/gen-short-url";
 // import { graphqlErrorHandler } from "@/graphql/errors/graphqlErrorHandler";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+// import { useLocalStorage } from "@/hooks/use-local-storage";
 import {
   shortUrlSchema,
   type ShortUrlFormValues,
 } from "@/schemas/short-url.schema";
-import { STORAGE_KEYS } from "@/utils/constants";
-import type { GeneratedURL } from "@/types";
+// import { STORAGE_KEYS } from "@/utils/constants";
+// import type { GeneratedURL } from "@/types";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useUser } from "@/hooks";
+import { createUniqueHash } from "@/utils/unique-hash";
 
 type FormStatus = {
   error?: string;
 };
 
 export function ShortUrlForm() {
-  const [items, setItems] = useLocalStorage<GeneratedURL[]>(
-    STORAGE_KEYS.SHORTENED_URLS,
-    [],
-  );
+  const { user } = useUser();
+
+  // const [items, setItems] = useLocalStorage<GeneratedURL[]>(
+  //   STORAGE_KEYS.SHORTENED_URLS,
+  //   [],
+  // );
 
   const [createShortUrl, { loading }] = useMutation<
     CreateShortUrlResponse,
     CreateShortUrlVariables
   >(CREATE_SHORT_URL_MUTATION);
 
-  const onFormSubmit = async (values: any, helpers: any) => {
-    console.log({ values, helpers, items });
+  const onFormSubmit = async (
+    values: {
+      url: string;
+    },
+    helpers: FormikHelpers<{
+      url: string;
+    }>,
+  ) => {
+    const uniqueHashRes = createUniqueHash(5);
 
-    function abc() {
-      createShortUrl;
-      setItems((prev) => [...prev]);
+    if (uniqueHashRes.uniqueHash === null) {
+      console.error(uniqueHashRes.error);
+      return;
     }
-    // const { resetForm, setStatus } = helpers;
-    // setStatus({});
+    console.log(uniqueHashRes.uniqueHash);
+    console.log({ values, helpers, user });
+    let userId = "";
 
-    // try {
-    //   const { data } = await createShortUrl({
-    //     variables: { url: values.url },
-    //   });
+    if (user && user.id) {
+      userId = user.id;
+    }
 
-    //   if (data?.createShortUrl) {
-    //     const payload = data.createShortUrl;
-    //     setItems((prev) => [...prev, payload]);
-    //     resetForm();
-    //   }
-    // } catch (error: any) {
-    //   // const message = graphqlErrorHandler(error);
-    //   setStatus({ error: error ? error.message : "" });
-    // }
+    const { resetForm, setStatus } = helpers;
+    setStatus({});
+
+    try {
+      const { data,error } = await createShortUrl({
+        variables: {
+          givenURL: values.url,
+          uniqueHash: uniqueHashRes.uniqueHash,
+          userId,
+        },
+      });
+
+      console.log(data,error)
+
+      if (data?.createShortUrl) {
+        const payload = data.createShortUrl;
+        resetForm();
+      }
+    } catch (error: any) {
+      // const message = graphqlErrorHandler(error);
+      setStatus({ error: error ? error.message : "" });
+    }
   };
 
   // const latest = items.length ? items[items.length - 1] : undefined;

@@ -3,7 +3,9 @@ import { gql } from "@apollo/client";
 import type { GeneratedURL } from "@/types";
 
 export type CreateShortUrlVariables = {
-  url: string;
+  givenURL: string;
+  uniqueHash: string;
+  userId?: string;
 };
 
 export type CreateShortUrlResponse = {
@@ -12,10 +14,14 @@ export type CreateShortUrlResponse = {
 
 // Adjust the field names to match your backend schema if needed.
 export const CREATE_SHORT_URL_MUTATION = gql`
-  mutation CreateShortUrl($url: String!) {
-    createShortUrl(url: $url) {
+  mutation CreateShortUrl($givenURL: String!,$uniqueHash:String!, $userId:String) {
+    generateUniqueURL(input: {givenURL: $givenURL, uniqueHash: $uniqueHash, userId:$userId}){
+      givenURL
+      generatedURL
+      createdAt
+      isBlock
       id
+      expirationDate
     }
   }
 `;
-
