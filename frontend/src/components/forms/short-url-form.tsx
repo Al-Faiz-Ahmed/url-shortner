@@ -63,15 +63,20 @@ export function ShortUrlForm() {
     setStatus({});
 
     try {
-      const { data,error } = await createShortUrl({
-        variables: {
-          givenURL: values.url,
-          uniqueHash: uniqueHashRes.uniqueHash,
-          userId,
-        },
+      const { data, error } = await createShortUrl({
+        variables: userId
+          ? {
+              givenURL: values.url,
+              uniqueHash: uniqueHashRes.uniqueHash,
+              userId,
+            }
+          : {
+              givenURL: values.url,
+              uniqueHash: uniqueHashRes.uniqueHash,
+            },
       });
 
-      console.log(data,error)
+      console.log(data, error);
 
       if (data?.createShortUrl) {
         const payload = data.createShortUrl;
