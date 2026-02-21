@@ -91,7 +91,7 @@ export function ShortUrlForm() {
   // const latest = items.length ? items[items.length - 1] : undefined;
 
   return (
-    <div className="w-full max-w-2xl">
+    <div className="w-full max-w-2xl px-4">
       <Formik<ShortUrlFormValues, FormStatus>
         initialValues={{ url: "" }}
         validationSchema={toFormikValidationSchema(shortUrlSchema)}
@@ -101,7 +101,7 @@ export function ShortUrlForm() {
       >
         {({ status, values, errors, touched }) => (
           <Form className="space-y-4 w-full ">
-            <div className="flex flex-col gap-3 md:flex-row">
+            <div className="flex gap-3 ">
               <div className="flex-1 ">
                 <Field name="url">
                   {({ field, meta }: any) => (
@@ -132,7 +132,7 @@ export function ShortUrlForm() {
               </div>
               <Button
                 type="submit"
-                className="px-6"
+                className="px-3 sm:px-6"
                 size="sm"
                 disabled={
                   loading || !values.url || (touched.url && errors.url)
@@ -145,7 +145,7 @@ export function ShortUrlForm() {
             </div>
 
             {status?.error && (
-              <p className="text-sm text-destructive" role="alert">
+              <p className="text-sm text-destructive text-left" role="alert">
                 {status.error}
               </p>
             )}

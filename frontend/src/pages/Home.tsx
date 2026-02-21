@@ -7,7 +7,7 @@ export function Home() {
     <div>
       <Header />
 
-      <section className="flex flex-col items-center gap-8 text-center bg-red">
+      <section className="flex flex-col items-center gap-8 text-center bg-red pt-4">
         <div className="space-y-4 text-center mb-6 md:mb-8">
           <p className="text-foreground text-xl md:text-2xl">
             Get rid of your LOOOOOONG url !
