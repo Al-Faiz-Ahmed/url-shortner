@@ -5,7 +5,7 @@ import ipAddressMiddleware from "./ip-address";
 
 export function globalMiddleWareController  (app: Express) {
   app.use(express.json());
-  app.set('trust proxy', true)
+  app.set('trust proxy', 'loopback')
   app.use(cors());
   app.use(ipAddressMiddleware);
 }

@@ -6,6 +6,7 @@ import type { Request, Response, NextFunction } from "express";
  * has no .ip or .socket; it only has headers.
  */
 const ipAddressMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  
   const existing = req.headers["x-real-ip"] ?? req.headers["x-forwarded-for"];
   if (!existing) {
     const ip = req.ip ?? req.socket?.remoteAddress ?? "";
