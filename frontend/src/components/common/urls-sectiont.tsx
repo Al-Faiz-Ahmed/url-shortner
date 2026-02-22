@@ -9,6 +9,7 @@ import { Delete, DeleteIcon, Trash, Trash2 } from "lucide-react";
 
 import { useEffect } from "react";
 import { Button } from "../ui/button";
+import UrlCard from "./url-card";
 
 const GeneratedUrlSection = () => {
   const [fetchUser] = useLazyQuery<GetUserResponse, GetUserVariables>(
@@ -52,12 +53,15 @@ const GeneratedUrlSection = () => {
         </p>
       ) : 
       <div>
-        <div>
+        <div className="flex justify-between">
 
         <h2 className="text-2xl">Your <span className="text-primary">Tiny Tiny</span> URLs</h2>
-        <Button><Trash2 /> Delete All</Button>
+        <Button variant="destructive"><Trash2 /> Delete All</Button>
         </div>
-
+        
+        <div>
+            <UrlCard />
+        </div>
       </div>
       
       }
