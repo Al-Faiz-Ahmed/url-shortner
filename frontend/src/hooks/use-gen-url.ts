@@ -22,11 +22,12 @@ export const useUrlData = () => {
 export const useUrlActions = () => {
   
   const updateUrl = useUrlStore((state) => state.updateUrl);
+  const setUrls = useUrlStore((state)=>state.setUrls);
   const setSelectedUrls = useUrlStore((state) => state.setSelectedUrls);
   const removeUrl = useUrlStore((state) => state.removeUrl);
   
 
-  return { updateUrl, setSelectedUrls, removeUrl };
+  return { updateUrl, setSelectedUrls, removeUrl,setUrls };
 };
 
 /**
@@ -77,6 +78,13 @@ export const useUrls = () => {
     [actions]
   );
 
+  const setAllUrls = useCallback(
+    async (urls: GeneratedURL[]) => {
+      actions.setUrls(urls);
+    },
+    [actions]
+  );
+
  
 
   return {
@@ -85,7 +93,8 @@ export const useUrls = () => {
     activeUrls,
     inactiveUrls,
     getUrlById,
-    removeUrl: removeUrlByid,
+    setAllUrls,
+    removeUrlByid,
     ...actions,
   }
 }
