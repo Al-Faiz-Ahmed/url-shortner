@@ -55,7 +55,7 @@ export const useSelectedUrl = () => {
 export const useUrls = () => {
   const data = useUrlData();
   const actions = useUrlActions();
-  const {  selectUrl } = useSelectedUrl();
+  const {  selectUrl,selectedUrls } = useSelectedUrl();
 
   // intentionally minimal deps to run once
 
@@ -90,6 +90,7 @@ export const useUrls = () => {
   return {
     ...data,
     selectUrl,
+    selectedUrls,
     activeUrls,
     inactiveUrls,
     getUrlById,

@@ -22,7 +22,7 @@ const GeneratedUrlSection = () => {
   
   
   const { user, setUser } = useUser();
-  const {urls,}  = useUrls()
+  const {urls,setUrls}  = useUrls()
   // const {} = useUrlActions()
 
 
@@ -40,6 +40,15 @@ const GeneratedUrlSection = () => {
           setUser(result.data.getUser);
           const userId = result.data.getUser.id 
           const getUrls = await fetchUrls({variables:{userId}});
+          
+          if (getUrls.error) {
+            console.log({ ...getUrls.error }, "Error From Fetched URLs");
+            return;
+          }
+
+          if(getUrls.data){
+            setUrls(getUrls.data.getAllUrl)
+          }
           // console.log({ user,urls }, "User fetched Successfully");
           
         }
@@ -67,9 +76,11 @@ const GeneratedUrlSection = () => {
         
         <div>
           {
-            
+           urls.map((url)=>(
+
+             <UrlCard key={url.id} {...url} />
+           )) 
           }
-            <UrlCard />
         </div>
       </div>
       

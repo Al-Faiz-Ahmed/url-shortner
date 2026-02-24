@@ -7,19 +7,23 @@ export type GetUrlsVariables = {
 };
 
 export type GetUrlsResponse = {
-  createShortUrl: GeneratedURL;
+  getAllUrl: GeneratedURL[];
 };
 
 // Adjust the field names to match your backend schema if needed.
 export const GET_URL_BY_ID_QUERY = gql`
-  query GetUrlById($userId:String!) {
-    getAllUrl(userId:$userId){
-      givenURL
-      generatedURL
-      createdAt
-      isBlock
+  query GetUrlById($userId: String!) {
+    getAllUrl(userId: $userId) {
       id
+      createdAt
       expirationDate
+      generatedURL
+      givenURL
+      isBlock
+      totalVisitors
+      uniqueHash
+      updatedAt
+      userId
     }
   }
 `;
