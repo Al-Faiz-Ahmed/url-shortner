@@ -22,7 +22,8 @@ const GeneratedUrlSection = () => {
   
   
   const { user, setUser } = useUser();
-  const {urls,setUrls}  = useUrls()
+  const {urls,setUrls,selectedUrls}  = useUrls()
+
   // const {} = useUrlActions()
 
 
@@ -81,6 +82,7 @@ const GeneratedUrlSection = () => {
              <UrlCard key={url.id} {...url} />
            )) 
           }
+          
         </div>
       </div>
       

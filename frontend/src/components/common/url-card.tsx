@@ -8,8 +8,14 @@ const UrlCard = ({ generatedURL, givenURL,id }: GeneratedURL) => {
   const {selectUrl}  = useUrls();
 
   const selectionHandler = () => {
-    setIsSelected(true)
-    selectUrl(id)
+  console.log
+
+    if(isSelected){
+      selectUrl(id,"remove")
+    }else{
+      selectUrl(id)
+    }
+    setIsSelected(preState => !preState)
   }
   return (
     <div>
@@ -18,8 +24,8 @@ const UrlCard = ({ generatedURL, givenURL,id }: GeneratedURL) => {
           <button
             type="button"
             onClick={selectionHandler}
-            // className="absolute top-3 right-3"
             aria-pressed={isSelected}
+            className="cursor-pointer"
           >
             {isSelected ? (
               <SquareCheck className="text-primary" />

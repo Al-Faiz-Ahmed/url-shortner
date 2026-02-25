@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useUrlStore } from "@/store/zustand";
-import type {  GeneratedURL} from "@/types";
+import type { GeneratedURL } from "@/types";
 
 /**
  * Hook for accessing URL list data (read-only)
@@ -12,7 +12,7 @@ export const useUrlData = () => {
   return useUrlStore(
     useShallow((state) => ({
       urls: state.generatedURLs,
-    }))
+    })),
   );
 };
 
@@ -20,14 +20,12 @@ export const useUrlData = () => {
  * Hook for URL actions only
  */
 export const useUrlActions = () => {
-  
   const updateUrl = useUrlStore((state) => state.updateUrl);
-  const setUrls = useUrlStore((state)=>state.setUrls);
-  const setSelectedUrls = useUrlStore((state) => state.setSelectedUrls);
+  const setUrls = useUrlStore((state) => state.setUrls);
+  const setSelectedUrl = useUrlStore((state) => state.setSelectedUrl);
   const removeUrl = useUrlStore((state) => state.removeUrl);
-  
 
-  return { updateUrl, setSelectedUrls, removeUrl,setUrls };
+  return { updateUrl, setSelectedUrl, removeUrl, setUrls };
 };
 
 /**
@@ -35,15 +33,15 @@ export const useUrlActions = () => {
  */
 export const useSelectedUrl = () => {
   const selectedUrls = useUrlStore((state) => state.selectedUrls);
-  const setSelectedUrls = useUrlStore((state) => state.setSelectedUrls);
-  
+  const setSelectedUrl = useUrlStore((state) => state.setSelectedUrl);
+
+  type selectUrlType = "add" | "remove";
 
   const selectUrl = useCallback(
-    (urlId: string) => {
-
-      setSelectedUrls([urlId]);
+    (urlId: string, type?: selectUrlType) => {
+      setSelectedUrl(urlId,type);
     },
-    [setSelectedUrls]
+    [setSelectedUrl],
   );
 
   return { selectedUrls, selectUrl };
@@ -55,7 +53,7 @@ export const useSelectedUrl = () => {
 export const useUrls = () => {
   const data = useUrlData();
   const actions = useUrlActions();
-  const {  selectUrl,selectedUrls } = useSelectedUrl();
+  const { selectUrl, selectedUrls } = useSelectedUrl();
 
   // intentionally minimal deps to run once
 
@@ -64,28 +62,24 @@ export const useUrls = () => {
 
   const getUrlById = useCallback(
     (id: string): GeneratedURL | undefined => {
-      return data.urls.find((url:GeneratedURL) => url.id === id);
+      return data.urls.find((url: GeneratedURL) => url.id === id);
     },
-    [data.urls]
+    [data.urls],
   );
-
-  
 
   const removeUrlByid = useCallback(
     async (id: string) => {
       actions.removeUrl(id);
     },
-    [actions]
+    [actions],
   );
 
   const setAllUrls = useCallback(
     async (urls: GeneratedURL[]) => {
       actions.setUrls(urls);
     },
-    [actions]
+    [actions],
   );
-
- 
 
   return {
     ...data,
@@ -97,5 +91,5 @@ export const useUrls = () => {
     setAllUrls,
     removeUrlByid,
     ...actions,
-  }
-}
+  };
+};
