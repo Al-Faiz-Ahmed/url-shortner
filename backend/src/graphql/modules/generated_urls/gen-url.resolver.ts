@@ -128,7 +128,7 @@ export const genUrlMutationsResolver = {
     return await GenUrlService.deleteURLById(userId,urlId, context);
   },
 
-  deleteMultipleURLsById: async (
+  deleteMultipleURLbyId: async (
     _: unknown,
     payload: { input: { userId: string; urlsId: string[] } },
     context: GraphQLContext,
