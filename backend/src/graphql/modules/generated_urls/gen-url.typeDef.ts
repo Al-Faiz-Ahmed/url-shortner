@@ -24,6 +24,10 @@ export const  genUrlTypeDefs = gql`
     available: Boolean!
     message: String!
   }
+  type DeleteURLRes {
+    message: String!
+    isDeleted: Boolean!
+  }
 
   input genUniqueUrlInput {
     givenURL: String!

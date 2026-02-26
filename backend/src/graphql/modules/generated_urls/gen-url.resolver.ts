@@ -5,7 +5,7 @@ import { UserService } from "../../../services/user.service";
 import { CatchPrismaError } from "../../../error/prisma.error";
 import { vGenUniqueUrl } from "../../../validations/models/gen-url-validation";
 import { NotFoundError, ValidationError } from "../../../error/app.error";
-import { vUserUUID } from "../../../validations/models/user-validation";
+import { vMultipleUUIDS, vUserUUID } from "../../../validations/models/user-validation";
 
 export const genUrlQueriesResolver = {
   getAllUrl: async (
@@ -97,6 +97,34 @@ export const genUrlMutationsResolver = {
       console.log("Error from genUrlMutationResolver", err);
       CatchPrismaError(err);
     }
+  },
+  deleteURLbyId : async(_: unknown,
+    {id}: { id: string },
+    context: GraphQLContext)=>{
+
+      const response = vUserUUID.safeParse({ userId:id });
+
+      if (response.success === false) {
+        const schemaErr =
+          response.error.issues[0]?.message || "Error found in schema";
+        return ValidationError(schemaErr);
+      }
+
+      return await GenUrlService.deleteURLById(id,context);
+  },
+  deleteMultipleURLsById : async(_: unknown,
+    {urlIds}: { urlIds: string[] },
+    context: GraphQLContext)=>{
+
+      const response = vMultipleUUIDS.safeParse({ uuids:urlIds });
+
+      if (response.success === false) {
+        const schemaErr =
+          response.error.issues[0]?.message || "Error found in schema";
+        return ValidationError(schemaErr);
+      }
+
+      // return await GenUrlService.deleteURLById(id,context);
   },
 
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,

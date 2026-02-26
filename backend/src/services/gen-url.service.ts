@@ -8,6 +8,7 @@ import { ValidationError } from "../error/app.error";
 import { CatchPrismaError } from "../error/prisma.error";
 import { envConfig } from "../lib/config/env-config";
 import { prisma } from "../lib/config/prisma-config";
+import { vUserUUID } from "../validations/models/user-validation";
 
 export class GenUrlService {
   /** Resolve short code to original URL; returns null if not found or blocked. */
@@ -103,6 +104,50 @@ export class GenUrlService {
   
     }catch(err){
       console.log("Error from findUniqueHashRecord", err);
+      CatchPrismaError(err);
+    }
+
+    
+  }
+
+  public static async deleteURLById(
+    urlId: string,
+    context: GraphQLContext,
+  ) {
+    const { prisma } = context;
+
+    if (!urlId) {
+      return ValidationError("Url Id is required");
+    }
+
+    const response = vUserUUID.safeParse({ userId:urlId });
+    if (response.success === false) {
+      const schemaErr =
+        response.error.issues[0]?.message || "Error found in schema";
+      return ValidationError(schemaErr);
+    }
+
+    try{
+
+      const deletedURL = await prisma.generatedURL.delete({
+        where: { id:urlId },
+        select: { id: true },
+      });
+  
+  
+      if(deletedURL){ 
+        return {
+          isDeleted: true,
+          message:"URL Successfully Deleted",
+        }
+      }
+      return {
+        isDeleted: false,
+        message:"URL doesn't exist",
+      }
+  
+    }catch(err){
+      console.log("Error from deleteURLById", err);
       CatchPrismaError(err);
     }
 
