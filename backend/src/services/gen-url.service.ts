@@ -8,7 +8,10 @@ import { ValidationError } from "../error/app.error";
 import { CatchPrismaError } from "../error/prisma.error";
 import { envConfig } from "../lib/config/env-config";
 import { prisma } from "../lib/config/prisma-config";
-import { vUserUUID } from "../validations/models/user-validation";
+import {
+  vMultipleUUIDS,
+  vUserUUID,
+} from "../validations/models/user-validation";
 
 export class GenUrlService {
   /** Resolve short code to original URL; returns null if not found or blocked. */
@@ -58,7 +61,6 @@ export class GenUrlService {
       return ValidationError("user Id is required to find Generated URL Data");
     }
 
-    
     return prisma.generatedURL.findMany({
       where: { userId },
     });
@@ -81,36 +83,32 @@ export class GenUrlService {
       return ValidationError(schemaErr);
     }
 
-    try{
-
-      const uniqueHashRecord =await prisma.generatedURL.findUnique({
+    try {
+      const uniqueHashRecord = await prisma.generatedURL.findUnique({
         where: { uniqueHash },
         select: { uniqueHash: true },
       });
-  
-  
-      if(uniqueHashRecord){ 
+
+      if (uniqueHashRecord) {
         return {
           uniqueHash,
           available: false,
-          message:"This Unique Hash is already taken",
-        }
+          message: "This Unique Hash is already taken",
+        };
       }
       return {
         uniqueHash,
         available: true,
-        message:"This Unique Hash is available",
-      }
-  
-    }catch(err){
+        message: "This Unique Hash is available",
+      };
+    } catch (err) {
       console.log("Error from findUniqueHashRecord", err);
       CatchPrismaError(err);
     }
-
-    
   }
 
   public static async deleteURLById(
+    userId: string,
     urlId: string,
     context: GraphQLContext,
   ) {
@@ -120,37 +118,75 @@ export class GenUrlService {
       return ValidationError("Url Id is required");
     }
 
-    const response = vUserUUID.safeParse({ userId:urlId });
+    const response = vUserUUID.safeParse({ userId: urlId });
     if (response.success === false) {
       const schemaErr =
         response.error.issues[0]?.message || "Error found in schema";
       return ValidationError(schemaErr);
     }
 
-    try{
-
+    try {
       const deletedURL = await prisma.generatedURL.delete({
-        where: { id:urlId },
+        where: { id: urlId, userId },
         select: { id: true },
       });
-  
-  
-      if(deletedURL){ 
+
+      if (deletedURL) {
         return {
           isDeleted: true,
-          message:"URL Successfully Deleted",
-        }
+          message: "URL Successfully Deleted",
+        };
       }
       return {
         isDeleted: false,
-        message:"URL doesn't exist",
-      }
-  
-    }catch(err){
+        message: "URL doesn't exist",
+      };
+    } catch (err) {
       console.log("Error from deleteURLById", err);
       CatchPrismaError(err);
     }
+  }
+  public static async deleteMultipleURLsById(
+    userId:string,
+    uuids: string[],
+    context: GraphQLContext,
+  ) {
+    const { prisma } = context;
 
-    
+    if (!uuids || uuids.length < 1) {
+      return ValidationError("Url Id is required");
+    }
+
+    const response = vMultipleUUIDS.safeParse({ uuids });
+    if (response.success === false) {
+      const schemaErr =
+        response.error.issues[0]?.message || "Error found in schema";
+      return ValidationError(schemaErr);
+    }
+
+    try {
+      const deletedURLs = await prisma.generatedURL.deleteMany({
+        where: {
+          id: {
+            in: uuids,
+          },
+          userId
+        },
+      });
+
+      if (deletedURLs) {
+        return {
+          isDeleted: true,
+          message: "URLs Successfully Deleted",
+        };
+      }
+      return {
+        isDeleted: false,
+        message: "URLs doesn't exist",
+      };
+    } catch (err) {
+      console.log("Error from deleteURLById", err);
+      CatchPrismaError(err);
+    }
   }
 }

@@ -35,4 +35,14 @@ export const  genUrlTypeDefs = gql`
     userId: String
   }
 
+  input deleteURLInput {
+    userId: String!
+    urlId: String!
+  }
+  
+  input deleteMultipleURLInput {
+    userId: String!
+    urlsId: [String!]!
+  }
+
 `;

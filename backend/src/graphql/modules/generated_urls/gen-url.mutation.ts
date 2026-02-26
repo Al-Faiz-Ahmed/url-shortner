@@ -3,8 +3,8 @@ import gql from "graphql-tag";
 export const genUrlMutationDefs = gql`
   extend type Mutation {
     _empty: String!
-    generateUniqueURL (input: genUniqueUrlInput!): GeneratedUrl! 
-    deleteURLbyId(userId: String!): DeleteURLRes!
-
+    generateUniqueURL(input: genUniqueUrlInput!): GeneratedUrl!
+    deleteURLbyId(input: deleteURLInput!): DeleteURLRes!
+    deleteMultipleURLbyId(input: deleteMultipleURLInput!): DeleteURLRes!
   }
 `;
