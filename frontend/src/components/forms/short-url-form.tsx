@@ -17,7 +17,7 @@ import {
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useUser } from "@/hooks";
+import { useUrls, useUser } from "@/hooks";
 import { createUniqueHash } from "@/utils/unique-hash";
 
 type FormStatus = {
@@ -26,6 +26,7 @@ type FormStatus = {
 
 export function ShortUrlForm() {
   const { user } = useUser();
+  const {addUrl} = useUrls()
 
   // const [items, setItems] = useLocalStorage<GeneratedURL[]>(
   //   STORAGE_KEYS.SHORTENED_URLS,
@@ -78,8 +79,10 @@ export function ShortUrlForm() {
 
       console.log(data, error);
 
-      if (data?.createShortUrl) {
-        const payload = data.createShortUrl;
+      if (data?.generateUniqueURL) {
+        const payload = data.generateUniqueURL;
+        addUrl(payload);
+       
         resetForm();
       }
     } catch (error: any) {

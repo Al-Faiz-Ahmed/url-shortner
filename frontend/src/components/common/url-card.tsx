@@ -20,7 +20,7 @@ const UrlCard = ({ generatedURL, givenURL,id }: GeneratedURL) => {
   return (
     <div>
       <div className="flex border border-gray-400 p-3 py-2 rounded-md gap-3">
-        <div>
+        <div className="p-0.5">
           <button
             type="button"
             onClick={selectionHandler}
@@ -28,9 +28,9 @@ const UrlCard = ({ generatedURL, givenURL,id }: GeneratedURL) => {
             className="cursor-pointer"
           >
             {isSelected ? (
-              <SquareCheck className="text-primary" />
+              <SquareCheck  className="text-primary size-5" />
             ) : (
-              <Square className="text-muted-foreground" />
+              <Square  className="text-muted-foreground size-5" />
             )}
           </button>
         </div>
@@ -44,9 +44,10 @@ const UrlCard = ({ generatedURL, givenURL,id }: GeneratedURL) => {
           >
             {generatedURL}
           </a>
-          <p className="text-muted-foreground text-xs">{givenURL}</p>
+          <p className="text-muted-foreground text-xs line-clamp-1">{givenURL.length < 35 ? givenURL : givenURL.slice(0,35) + "..."}</p>
+        
         </div>
-        <div className="flex">
+        <div className="flex ml-auto">
           <button className="">
             <Trash />
           </button>

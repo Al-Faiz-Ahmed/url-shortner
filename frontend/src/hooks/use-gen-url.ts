@@ -22,10 +22,11 @@ export const useUrlData = () => {
 export const useUrlActions = () => {
   const updateUrl = useUrlStore((state) => state.updateUrl);
   const setUrls = useUrlStore((state) => state.setUrls);
+  const addUrl = useUrlStore((state) => state.addUrl);
   const setSelectedUrl = useUrlStore((state) => state.setSelectedUrl);
   const removeUrl = useUrlStore((state) => state.removeUrl);
 
-  return { updateUrl, setSelectedUrl, removeUrl, setUrls };
+  return { updateUrl, setSelectedUrl, removeUrl, setUrls,addUrl };
 };
 
 /**
