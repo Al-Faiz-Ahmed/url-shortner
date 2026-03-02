@@ -1,26 +1,44 @@
 import { useUrls } from "@/hooks";
 import type { GeneratedURL } from "@/types";
-import { Check, Square, SquareCheck, SquarePen, Trash } from "lucide-react";
+import {
+  Check,
+  Ellipsis,
+  EllipsisVertical,
+  Square,
+  SquareCheck,
+  SquarePen,
+  Trash,
+} from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-const UrlCard = ({ generatedURL, givenURL,id }: GeneratedURL) => {
-  const [isSelected,setIsSelected] = useState(false)
-  const {selectUrl}  = useUrls();
+const UrlCard = ({ generatedURL, givenURL, id }: GeneratedURL) => {
+  const [isSelected, setIsSelected] = useState(false);
+  const { selectUrl } = useUrls();
 
   const selectionHandler = () => {
-  console.log
+    console.log;
 
-    if(isSelected){
-      selectUrl(id,"remove")
-    }else{
-      selectUrl(id)
+    if (isSelected) {
+      selectUrl(id, "remove");
+    } else {
+      selectUrl(id);
     }
-    setIsSelected(preState => !preState)
-  }
+    setIsSelected((preState) => !preState);
+  };
   return (
     <div>
-      <div className="flex border border-gray-400 p-3 py-2 rounded-md gap-3">
-        <div className="p-0.5">
+      <div className="flex border border-gray-400 p-3 py-2 rounded-md gap-3 items-center">
+        <div className="p-0.5 self-start">
           <button
             type="button"
             onClick={selectionHandler}
@@ -28,9 +46,9 @@ const UrlCard = ({ generatedURL, givenURL,id }: GeneratedURL) => {
             className="cursor-pointer"
           >
             {isSelected ? (
-              <SquareCheck  className="text-primary size-5" />
+              <SquareCheck className="text-primary size-5" />
             ) : (
-              <Square  className="text-muted-foreground size-5" />
+              <Square className="text-muted-foreground size-5" />
             )}
           </button>
         </div>
@@ -44,17 +62,19 @@ const UrlCard = ({ generatedURL, givenURL,id }: GeneratedURL) => {
           >
             {generatedURL}
           </a>
-          <p className="text-muted-foreground text-xs line-clamp-1">{givenURL.length < 35 ? givenURL : givenURL.slice(0,35) + "..."}</p>
-        
+          <p className="text-muted-foreground text-xs line-clamp-1">
+            {givenURL.length < 35 ? givenURL : givenURL.slice(0, 35) + "..."}
+          </p>
         </div>
         <div className="flex ml-auto">
-          <button className="">
+          <UrlCardActions />
+          {/* <button className="">
             <Trash />
           </button>
           <button className="">
             <SquarePen />
           </button>
-          <button className=""></button>
+          <button className=""></button> */}
         </div>
       </div>
     </div>
@@ -62,3 +82,21 @@ const UrlCard = ({ generatedURL, givenURL,id }: GeneratedURL) => {
 };
 
 export default UrlCard;
+
+const UrlCardActions = () => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <EllipsisVertical />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuGroup>
+          <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer" variant="destructive">Delete</DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};

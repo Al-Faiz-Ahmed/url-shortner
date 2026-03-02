@@ -135,8 +135,8 @@ export function ShortUrlForm() {
               </div>
               <Button
                 type="submit"
-                className="px-3 sm:px-6"
                 size="sm"
+                className="px-3 sm:px-6 cursor-pointer"
                 disabled={
                   loading || !values.url || (touched.url && errors.url)
                     ? true

@@ -76,7 +76,7 @@ const GeneratedUrlSection = () => {
             </h2>
             {
               selectedUrls.length > 0 && (
-                <Button variant="destructive" size="sm">
+                <Button className="cursor-pointer" variant="destructive" size="sm">
                   <Trash2 /> Delete All
                 </Button>
               )
