@@ -27,14 +27,12 @@ export const useUrlStore = create<UrlState>()(
         removeUrl: (id) =>
           set(
             (state) => ({
-              urls: state.generatedURLs.filter((url) => url.id !== id),
-
-              selectedUrls:
-                state.selectedUrls && state.selectedUrls.length > 0
-                  ? state.selectedUrls.filter(
-                      (previousURLId) => previousURLId !== id,
-                    )
-                  : [],
+              generatedURLs: state.generatedURLs.filter((url) => url.id !== id),
+              selectedUrls: state.selectedUrls
+                ? state.selectedUrls.filter(
+                    (previousURLId) => previousURLId !== id,
+                  )
+                : [],
             }),
             false,
             "removeUrl",

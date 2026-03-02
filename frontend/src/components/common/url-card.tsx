@@ -1,4 +1,4 @@
-import { useUrls } from "@/hooks";
+import { useUrls, useUser } from "@/hooks";
 import type { GeneratedURL } from "@/types";
 import {
   Check,
@@ -16,14 +16,25 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useMutation } from "@apollo/client/react";
+import {
+  DELETE_URL_BY_ID_MUTATION,
+  type DeleteURLResponse,
+  type DeleteURLVariables,
+} from "@/graphql/mutations/gen-short-url";
+import { toast } from "sonner";
 
 const UrlCard = ({ generatedURL, givenURL, id }: GeneratedURL) => {
   const [isSelected, setIsSelected] = useState(false);
-  const { selectUrl } = useUrls();
+  const { user } = useUser();
+  const [deleteURLbyIdMutaion,  {loading:deleteLoading}] = useMutation<
+    DeleteURLResponse,
+    DeleteURLVariables
+  >(DELETE_URL_BY_ID_MUTATION);
+
+  const { selectUrl, removeUrlByid } = useUrls();
 
   const selectionHandler = () => {
     console.log;
@@ -35,6 +46,32 @@ const UrlCard = ({ generatedURL, givenURL, id }: GeneratedURL) => {
     }
     setIsSelected((preState) => !preState);
   };
+
+  const deleteHandler = async () => {
+    console.log("deleteHandler");
+    if (!user || deleteLoading) return;
+    await deleteURLbyIdMutaion({
+      variables: {
+        userId: user?.id || "",
+        urlId: id,
+      },
+    })
+      .then((res) => {
+        removeUrlByid(id);
+        toast.success(
+          res.data?.deleteURLbyId.message ||
+            "URL deleted successfully",
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const editHandler = () => {
+    console.log("editHandler");
+  };
+
   return (
     <div>
       <div className="flex border border-gray-400 p-3 py-2 rounded-md gap-3 items-center">
@@ -67,14 +104,7 @@ const UrlCard = ({ generatedURL, givenURL, id }: GeneratedURL) => {
           </p>
         </div>
         <div className="flex ml-auto">
-          <UrlCardActions />
-          {/* <button className="">
-            <Trash />
-          </button>
-          <button className="">
-            <SquarePen />
-          </button>
-          <button className=""></button> */}
+          <UrlCardActions onDelete={deleteHandler} onEdit={editHandler} />
         </div>
       </div>
     </div>
@@ -83,7 +113,13 @@ const UrlCard = ({ generatedURL, givenURL, id }: GeneratedURL) => {
 
 export default UrlCard;
 
-const UrlCardActions = () => {
+const UrlCardActions = ({
+  onDelete,
+  onEdit,
+}: {
+  onDelete: () => void;
+  onEdit: () => void;
+}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -93,8 +129,16 @@ const UrlCardActions = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer" variant="destructive">Delete</DropdownMenuItem>
+          <DropdownMenuItem onMouseUp={onEdit} className="cursor-pointer">
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onMouseUp={onDelete}
+            className="cursor-pointer"
+            variant="destructive"
+          >
+            Delete
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

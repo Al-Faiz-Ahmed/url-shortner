@@ -70,6 +70,8 @@ export const useUrls = () => {
 
   const removeUrlByid = useCallback(
     async (id: string) => {
+      console.log("I am just called by yout side");
+      
       actions.removeUrl(id);
     },
     [actions],
