@@ -32,7 +32,8 @@ const UrlCard = ({
   givenURL,
   id,
   totalVisitors,
-}: GeneratedURL) => {
+  selectedURLIds,
+}: GeneratedURL & { selectedURLIds: Set<string> }) => {
   const [isSelected, setIsSelected] = useState(false);
   const { user } = useUser();
   const [deleteURLbyIdMutaion, { loading: deleteLoading }] = useMutation<
@@ -40,11 +41,12 @@ const UrlCard = ({
     DeleteURLVariables
   >(DELETE_URL_BY_ID_MUTATION);
 
-  const { selectUrl, removeUrlByid } = useUrls();
+  const { selectUrl, removeUrlByid, urls, selectedUrls } = useUrls();
+
+  const urlsLength = urls.length;
+  const selectedUrlsLength = selectedUrls.length;
 
   const selectionHandler = () => {
-    console.log;
-
     if (isSelected) {
       selectUrl(id, "remove");
     } else {
@@ -81,18 +83,20 @@ const UrlCard = ({
     <div>
       <div className="flex border border-gray-400 p-3 py-2 rounded-md gap-3 items-center">
         <div className="p-0.5 self-start">
-          <button
-            type="button"
-            onClick={selectionHandler}
-            aria-pressed={isSelected}
-            className="cursor-pointer"
-          >
-            {isSelected ? (
-              <SquareCheck className="text-primary size-5" />
-            ) : (
-              <Square className="text-muted-foreground size-5" />
-            )}
-          </button>
+          {selectedUrlsLength !== urlsLength - 1 || selectedURLIds.has(id) ? (
+            <button
+              type="button"
+              onClick={selectionHandler}
+              aria-pressed={isSelected}
+              className="cursor-pointer"
+            >
+              {isSelected ? (
+                <SquareCheck className="text-primary size-5" />
+              ) : (
+                <Square className="text-muted-foreground size-5" />
+              )}
+            </button>
+          ) : null}
         </div>
         <div>
           <a
@@ -110,11 +114,27 @@ const UrlCard = ({
         </div>
         <div className="flex ml-auto items-center gap-x-4 font-sans">
           <div className="text-xs bg-primary-800 text-primary rounded-full px-2 py-1">
-            {totalVisitors < 1
-              ? <div title={totalVisitors + " View"} className="flex items-center gap-1"> 0 <EyeIcon strokeWidth="1.5px" className="size-4" /></div>
-              :  <div title={totalVisitors + " Views"} className="flex items-center gap-1">{totalVisitors} <EyeIcon strokeWidth="1.5px" className="size-4" /></div>}
+            {totalVisitors < 1 ? (
+              <div
+                title={totalVisitors + " View"}
+                className="flex items-center gap-1"
+              >
+                {" "}
+                0 <EyeIcon strokeWidth="1.5px" className="size-4" />
+              </div>
+            ) : (
+              <div
+                title={totalVisitors + " Views"}
+                className="flex items-center gap-1"
+              >
+                {totalVisitors}{" "}
+                <EyeIcon strokeWidth="1.5px" className="size-4" />
+              </div>
+            )}
           </div>
-          <UrlCardActions onDelete={deleteHandler} onEdit={editHandler} />
+          {selectedUrlsLength < 1 && (
+            <UrlCardActions onDelete={deleteHandler} onEdit={editHandler} />
+          )}
         </div>
       </div>
     </div>
@@ -130,6 +150,7 @@ const UrlCardActions = ({
   onDelete: () => void;
   onEdit: () => void;
 }) => {
+  const { urls } = useUrls();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -142,13 +163,15 @@ const UrlCardActions = ({
           <DropdownMenuItem onMouseUp={onEdit} className="cursor-pointer">
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onMouseUp={onDelete}
-            className="cursor-pointer"
-            variant="destructive"
-          >
-            Delete
-          </DropdownMenuItem>
+          {urls && urls.length > 1 && (
+            <DropdownMenuItem
+              onMouseUp={onDelete}
+              className="cursor-pointer"
+              variant="destructive"
+            >
+              Delete
+            </DropdownMenuItem>
+          )}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

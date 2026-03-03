@@ -27,6 +27,8 @@ const GeneratedUrlSection = () => {
   const { user, setUser } = useUser();
   const { urls, setUrls,selectedUrls } = useUrls();
 
+  const newSelectedURLset = new Set(selectedUrls)
+
   // const {} = useUrlActions()
 
   useEffect(() => {
@@ -97,7 +99,7 @@ const GeneratedUrlSection = () => {
 
           <div className="space-y-4">
             {urls.map((url) => (
-              <UrlCard key={url.id} {...url} />
+              <UrlCard key={url.id} {...url} selectedURLIds={newSelectedURLset} />
             ))}
           </div>
         </div>
