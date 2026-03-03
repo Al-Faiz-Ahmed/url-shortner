@@ -54,15 +54,25 @@ const GeneratedUrlSection = () => {
           }
           // console.log({ user,urls }, "User fetched Successfully");
         }
-      } else {
-        console.log({ user }, "From useEffect else");
+      } else if (user && urls.length < 1){
+        const userId = user.id;
+        const getUrls = await fetchUrls({ variables: { userId } });
+
+        if (getUrls.error) {
+          console.log({ ...getUrls.error }, "Error From Fetched URLs");
+          return;
+        }
+
+        if (getUrls.data) {
+          setUrls(getUrls.data.getAllUrl);
+        }
       }
     })();
   }, []);
 
   return (
     <section className="pt-24">
-      {!user || selectedUrls.length < 1 ? (
+      {!user || urls.length < 1 ? (
         <p className="text-md md:text-lg leading-relaxed text-muted-foreground/80 w-fit mx-auto text-center">
           Create your first <span className="text-primary">Tini Tiny </span>
           URL from here <br /> and share with 8,300,000,000 billion people{" "}
@@ -75,11 +85,12 @@ const GeneratedUrlSection = () => {
               Your <span className="text-primary">Tiny Tiny</span> URLs
             </h2>
             {
-              selectedUrls.length > 0 && (
+              selectedUrls.length > 0 ? (
                 <Button className="cursor-pointer" variant="destructive" size="sm">
                   <Trash2 /> Delete All
                 </Button>
               )
+              : (<div>{urls.length}/5</div>)
             }
            
           </div>

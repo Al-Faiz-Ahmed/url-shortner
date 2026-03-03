@@ -4,6 +4,7 @@ import {
   Check,
   Ellipsis,
   EllipsisVertical,
+  EyeIcon,
   Square,
   SquareCheck,
   SquarePen,
@@ -26,10 +27,15 @@ import {
 } from "@/graphql/mutations/gen-short-url";
 import { toast } from "sonner";
 
-const UrlCard = ({ generatedURL, givenURL, id }: GeneratedURL) => {
+const UrlCard = ({
+  generatedURL,
+  givenURL,
+  id,
+  totalVisitors,
+}: GeneratedURL) => {
   const [isSelected, setIsSelected] = useState(false);
   const { user } = useUser();
-  const [deleteURLbyIdMutaion,  {loading:deleteLoading}] = useMutation<
+  const [deleteURLbyIdMutaion, { loading: deleteLoading }] = useMutation<
     DeleteURLResponse,
     DeleteURLVariables
   >(DELETE_URL_BY_ID_MUTATION);
@@ -59,8 +65,7 @@ const UrlCard = ({ generatedURL, givenURL, id }: GeneratedURL) => {
       .then((res) => {
         removeUrlByid(id);
         toast.success(
-          res.data?.deleteURLbyId.message ||
-            "URL deleted successfully",
+          res.data?.deleteURLbyId.message || "URL deleted successfully",
         );
       })
       .catch((err) => {
@@ -103,7 +108,12 @@ const UrlCard = ({ generatedURL, givenURL, id }: GeneratedURL) => {
             {givenURL.length < 35 ? givenURL : givenURL.slice(0, 35) + "..."}
           </p>
         </div>
-        <div className="flex ml-auto">
+        <div className="flex ml-auto items-center gap-x-4 font-sans">
+          <div className="text-xs bg-primary-800 text-primary rounded-full px-2 py-1">
+            {totalVisitors < 1
+              ? <div title={totalVisitors + " View"} className="flex items-center gap-1"> 0 <EyeIcon strokeWidth="1.5px" className="size-4" /></div>
+              :  <div title={totalVisitors + " Views"} className="flex items-center gap-1">{totalVisitors} <EyeIcon strokeWidth="1.5px" className="size-4" /></div>}
+          </div>
           <UrlCardActions onDelete={deleteHandler} onEdit={editHandler} />
         </div>
       </div>
