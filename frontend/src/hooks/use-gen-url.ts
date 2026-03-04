@@ -24,9 +24,11 @@ export const useUrlActions = () => {
   const setUrls = useUrlStore((state) => state.setUrls);
   const addUrl = useUrlStore((state) => state.addUrl);
   const setSelectedUrl = useUrlStore((state) => state.setSelectedUrl);
+  const removeAllSelectedUrl = useUrlStore((state) => state.removeAllSelectedUrl);
+  const removeMultipleUrls = useUrlStore((state) => state.removeMultipleUrls);
   const removeUrl = useUrlStore((state) => state.removeUrl);
 
-  return { updateUrl, setSelectedUrl, removeUrl, setUrls,addUrl };
+  return { updateUrl, setSelectedUrl, removeUrl, setUrls,addUrl,removeAllSelectedUrl,removeMultipleUrls };
 };
 
 /**
@@ -35,6 +37,7 @@ export const useUrlActions = () => {
 export const useSelectedUrl = () => {
   const selectedUrls = useUrlStore((state) => state.selectedUrls);
   const setSelectedUrl = useUrlStore((state) => state.setSelectedUrl);
+  const removeAllSelectedURL = useUrlStore((state) => state.removeAllSelectedUrl);
 
   type selectUrlType = "add" | "remove";
 
@@ -45,7 +48,7 @@ export const useSelectedUrl = () => {
     [setSelectedUrl],
   );
 
-  return { selectedUrls, selectUrl };
+  return { selectedUrls, selectUrl,removeAllSelectedURL };
 };
 
 /**
@@ -68,6 +71,7 @@ export const useUrls = () => {
     [data.urls],
   );
 
+
   const removeUrlByid = useCallback(
     async (id: string) => {
       console.log("I am just called by yout side");
@@ -76,6 +80,24 @@ export const useUrls = () => {
     },
     [actions],
   );
+  const removeMultipleUrls = useCallback(
+    async (ids:string[]) => {
+      console.log("I am just called by yout side");
+      
+      actions.removeMultipleUrls(ids);
+    },
+    [actions],
+  );
+  const removeAllSelectedUrls = useCallback(
+    async () => {
+      console.log("I am just called by yout side");
+      
+      actions.removeAllSelectedUrl();
+    },
+    [actions],
+  );
+
+  
 
   const setAllUrls = useCallback(
     async (urls: GeneratedURL[]) => {
@@ -88,6 +110,8 @@ export const useUrls = () => {
     ...data,
     selectUrl,
     selectedUrls,
+    removeMultipleURLS:removeMultipleUrls,
+    removeAllSelectedUrls,
     activeUrls,
     inactiveUrls,
     getUrlById,

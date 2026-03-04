@@ -37,6 +37,11 @@ export const useUrlStore = create<UrlState>()(
             false,
             "removeUrl",
           ),
+          removeMultipleUrls: (ids) => set((state)=>({
+            generatedURLs: state.generatedURLs.filter((url) => !ids.includes(url.id))
+          }),
+          false,
+          "removeUrl",),
 
         updateUrl: (id, updates) =>
           set(
@@ -60,6 +65,15 @@ export const useUrlStore = create<UrlState>()(
             false,
             "setSelectedUrl",
           ),
+        removeAllSelectedUrl: () => {
+          return set(
+            () => ({
+              selectedUrls: [],
+            }),
+            false,
+            "removeAllSelectedUrl",
+          );
+        },
 
         // Async Actions
       }),

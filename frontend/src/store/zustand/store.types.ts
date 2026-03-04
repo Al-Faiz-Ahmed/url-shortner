@@ -26,7 +26,9 @@ export interface UrlState {
     setUrls: (urls: GeneratedURL[]) => void;
     addUrl: (url: GeneratedURL) => void;
     removeUrl: (id: string) => void;
+    removeMultipleUrls:(ids:string[]) => void
     updateUrl: (id: string, updates: Partial<GeneratedURL>) => void;
     setSelectedUrl: (url: string,type?:"add"|"remove") => void;
+    removeAllSelectedUrl:() => void
    
 }

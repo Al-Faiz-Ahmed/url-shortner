@@ -4,7 +4,7 @@ import {
   type GetUserVariables,
 } from "@/graphql/queries/get-user";
 import { useUrlActions, useUrls, useUser } from "@/hooks";
-import { useLazyQuery } from "@apollo/client/react";
+import { useLazyQuery, useMutation } from "@apollo/client/react";
 import { Trash2 } from "lucide-react";
 
 import { useEffect } from "react";
@@ -15,6 +15,12 @@ import {
   type GetUrlsResponse,
   type GetUrlsVariables,
 } from "@/graphql/queries/get-urls";
+import {
+  DELETE_MULTIPLE_URL_BY_ID_MUTATION,
+  type DeleteMultipleURLResponse,
+  type DeleteMultipleURLVariables,
+} from "@/graphql/mutations/gen-short-url";
+import { toast } from "sonner";
 
 const GeneratedUrlSection = () => {
   const [fetchUser] = useLazyQuery<GetUserResponse, GetUserVariables>(
@@ -24,10 +30,16 @@ const GeneratedUrlSection = () => {
     GET_URL_BY_ID_QUERY,
   );
 
-  const { user, setUser } = useUser();
-  const { urls, setUrls,selectedUrls } = useUrls();
+  const [deleteMultipleURlById, { loading: deleteLoading }] = useMutation<
+    DeleteMultipleURLResponse,
+    DeleteMultipleURLVariables
+  >(DELETE_MULTIPLE_URL_BY_ID_MUTATION);
 
-  const newSelectedURLset = new Set(selectedUrls)
+  const { user, setUser } = useUser();
+  const { urls, setUrls, selectedUrls, removeAllSelectedUrl, removeMultipleURLS } =
+    useUrls();
+
+  const newSelectedURLset = new Set(selectedUrls);
 
   // const {} = useUrlActions()
 
@@ -56,7 +68,7 @@ const GeneratedUrlSection = () => {
           }
           // console.log({ user,urls }, "User fetched Successfully");
         }
-      } else if (user && urls.length < 1){
+      } else if (user && urls.length < 1) {
         const userId = user.id;
         const getUrls = await fetchUrls({ variables: { userId } });
 
@@ -72,8 +84,34 @@ const GeneratedUrlSection = () => {
     })();
   }, []);
 
+  const handleDeleteAll = async () => {
+    console.log("deleteHandler");
+    if (!user || deleteLoading) return;
+
+    const cloneSelectedURL = [...selectedUrls];
+
+    await deleteMultipleURlById({
+      variables: {
+        userId: user?.id || "",
+        urlsId: selectedUrls,
+      },
+    })
+      .then((res) => {
+        // removeUrlByid(id);
+        removeAllSelectedUrl();
+        removeMultipleURLS(cloneSelectedURL);
+        toast.success(
+          res.data?.deleteMultipleURLbyId.message ||
+            "All Selected URL deleted successfully",
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
-    <section className="pt-24">
+    <section className="pt-24  px-4">
       {!user || urls.length < 1 ? (
         <p className="text-md md:text-lg leading-relaxed text-muted-foreground/80 w-fit mx-auto text-center">
           Create your first <span className="text-primary">Tini Tiny </span>
@@ -86,20 +124,27 @@ const GeneratedUrlSection = () => {
             <h2 className="text-2xl">
               Your <span className="text-primary">Tiny Tiny</span> URLs
             </h2>
-            {
-              selectedUrls.length > 0 ? (
-                <Button className="cursor-pointer" variant="destructive" size="sm">
-                  <Trash2 /> Delete All
-                </Button>
-              )
-              : (<div>{urls.length}/5</div>)
-            }
-           
+            {selectedUrls.length > 0 ? (
+              <Button
+                onMouseUp={handleDeleteAll}
+                className="cursor-pointer"
+                variant="destructive"
+                size="sm"
+              >
+                <Trash2 /> Delete All
+              </Button>
+            ) : (
+              <div>{urls.length}/5</div>
+            )}
           </div>
 
           <div className="space-y-4">
             {urls.map((url) => (
-              <UrlCard key={url.id} {...url} selectedURLIds={newSelectedURLset} />
+              <UrlCard
+                key={url.id}
+                {...url}
+                selectedURLIds={newSelectedURLset}
+              />
             ))}
           </div>
         </div>
