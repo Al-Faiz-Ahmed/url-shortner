@@ -3,7 +3,7 @@ import {
   type GetUserResponse,
   type GetUserVariables,
 } from "@/graphql/queries/get-user";
-import { useUrlActions, useUrls, useUser } from "@/hooks";
+import {  useUrls, useUser } from "@/hooks";
 import { useLazyQuery, useMutation } from "@apollo/client/react";
 import { Trash2 } from "lucide-react";
 

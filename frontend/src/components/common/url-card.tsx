@@ -1,14 +1,10 @@
 import { useUrls, useUser } from "@/hooks";
 import type { GeneratedURL } from "@/types";
 import {
-  Check,
-  Ellipsis,
   EllipsisVertical,
   EyeIcon,
   Square,
   SquareCheck,
-  SquarePen,
-  Trash,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
