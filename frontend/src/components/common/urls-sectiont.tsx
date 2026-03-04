@@ -21,6 +21,16 @@ import {
   type DeleteMultipleURLVariables,
 } from "@/graphql/mutations/gen-short-url";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const GeneratedUrlSection = () => {
   const [fetchUser] = useLazyQuery<GetUserResponse, GetUserVariables>(
@@ -36,8 +46,13 @@ const GeneratedUrlSection = () => {
   >(DELETE_MULTIPLE_URL_BY_ID_MUTATION);
 
   const { user, setUser } = useUser();
-  const { urls, setUrls, selectedUrls, removeAllSelectedUrl, removeMultipleURLS } =
-    useUrls();
+  const {
+    urls,
+    setUrls,
+    selectedUrls,
+    removeAllSelectedUrl,
+    removeMultipleURLS,
+  } = useUrls();
 
   const newSelectedURLset = new Set(selectedUrls);
 
@@ -86,6 +101,7 @@ const GeneratedUrlSection = () => {
 
   const handleDeleteAll = async () => {
     console.log("deleteHandler");
+
     if (!user || deleteLoading) return;
 
     const cloneSelectedURL = [...selectedUrls];
@@ -97,16 +113,17 @@ const GeneratedUrlSection = () => {
       },
     })
       .then((res) => {
-        // removeUrlByid(id);
-        removeAllSelectedUrl();
-        removeMultipleURLS(cloneSelectedURL);
-        toast.success(
-          res.data?.deleteMultipleURLbyId.message ||
-            "All Selected URL deleted successfully",
-        );
+       
+        if (res?.data?.deleteMultipleURLbyId?.isDeleted) {
+          toast.success("All Selected URL deleted successfully");
+          removeAllSelectedUrl()
+          removeMultipleURLS(cloneSelectedURL);
+        } else {
+          toast.error(res.data?.deleteMultipleURLbyId.message);
+        }
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err.errors[0].message || "Something Went Wrong!");
       });
   };
 
@@ -125,16 +142,12 @@ const GeneratedUrlSection = () => {
               Your <span className="text-primary">Tiny Tiny</span> URLs
             </h2>
             {selectedUrls.length > 0 ? (
-              <Button
-                onMouseUp={handleDeleteAll}
-                className="cursor-pointer"
-                variant="destructive"
-                size="sm"
-              >
-                <Trash2 /> Delete All
-              </Button>
+              <ConfirmDeleteDialog
+                handleDeleteAll={handleDeleteAll}
+                deleteLoading={deleteLoading}
+              />
             ) : (
-              <div>{urls.length}/5</div>
+              <div title="Generate upto 5 Urls">{urls.length}/5</div>
             )}
           </div>
 
@@ -154,3 +167,52 @@ const GeneratedUrlSection = () => {
 };
 
 export default GeneratedUrlSection;
+
+const ConfirmDeleteDialog = ({
+  handleDeleteAll,
+  deleteLoading,
+}: {
+  handleDeleteAll: () => void;
+  deleteLoading: boolean;
+}) => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button
+          // onMouseUp={handleDeleteAll}
+          className="cursor-pointer"
+          variant="destructive"
+          size="sm"
+          title={`${deleteLoading}`}
+          disabled={deleteLoading}
+        >
+          <Trash2 /> Delete All
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete your all
+            selected URLs data from our servers.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button
+            onMouseUp={handleDeleteAll}
+            className="cursor-pointer"
+            variant="destructive"
+            size="sm"
+            title={`${deleteLoading}`}
+            disabled={deleteLoading}
+          >
+            <Trash2 /> Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};

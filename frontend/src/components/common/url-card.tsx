@@ -63,15 +63,23 @@ const UrlCard = ({
         userId: user?.id || "",
         urlId: id,
       },
+      
     })
       .then((res) => {
-        removeUrlByid(id);
-        toast.success(
-          res.data?.deleteURLbyId.message || "URL deleted successfully",
-        );
+        if(res.data?.deleteURLbyId.isDeleted){
+
+          removeUrlByid(id);
+          toast.success(
+            res.data?.deleteURLbyId.message || "URL deleted successfully",
+          );
+        }else{
+          toast.error(res.data?.deleteURLbyId.message);
+       
+        }
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err.errors[0].message || "Something Went Wrong!");
+     
       });
   };
 

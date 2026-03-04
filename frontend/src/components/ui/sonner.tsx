@@ -1,3 +1,4 @@
+import * as React from "react"
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -15,6 +16,24 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
+      richColors
+      // closeButton
+      toastOptions={{
+        classNames: {
+          toast:
+            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg group-[.toaster]:rounded-lg",
+          description: "group-[.toast]:text-muted-foreground",
+          actionButton:
+            "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground group-[.toast]:shadow-sm group-[.toast]:hover:bg-primary/90",
+          cancelButton:
+            "group-[.toast]:bg-secondary group-[.toast]:text-secondary-foreground group-[.toast]:hover:bg-secondary/80",
+          closeButton:
+            "group-[.toast]:text-muted-foreground group-[.toast]:hover:text-foreground",
+          // Strong, on-brand error state (red / destructive)
+          error:
+            "!border-destructive  !text-destructive-foreground ",
+        },
+      }}
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,

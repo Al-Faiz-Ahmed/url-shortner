@@ -131,6 +131,7 @@ export class GenUrlService {
         select: { id: true },
       });
 
+      console.log(deletedURL,"deletedURLS")
       if (deletedURL) {
         return {
           isDeleted: true,
@@ -174,7 +175,8 @@ export class GenUrlService {
         },
       });
 
-      if (deletedURLs) {
+
+      if (deletedURLs && deletedURLs.count > 0 ) {
         return {
           isDeleted: true,
           message: "URLs Successfully Deleted",
