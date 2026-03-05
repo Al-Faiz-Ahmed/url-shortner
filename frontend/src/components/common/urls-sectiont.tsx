@@ -3,9 +3,9 @@ import {
   type GetUserResponse,
   type GetUserVariables,
 } from "@/graphql/queries/get-user";
-import {  useUrls, useUser } from "@/hooks";
+import { useUrls, useUser } from "@/hooks";
 import { useLazyQuery, useMutation } from "@apollo/client/react";
-import { Trash2 } from "lucide-react";
+import { RefreshCw, Trash2 } from "lucide-react";
 
 import { useEffect } from "react";
 import { Button } from "../ui/button";
@@ -113,13 +113,16 @@ const GeneratedUrlSection = () => {
       },
     })
       .then((res) => {
-       
         if (res?.data?.deleteMultipleURLbyId?.isDeleted) {
           toast.success("All Selected URL deleted successfully");
-          removeAllSelectedUrl()
+          removeAllSelectedUrl();
           removeMultipleURLS(cloneSelectedURL);
-          if(user){
-            setUser({...user,totalShortenedURL:user.totalShortenedURL - cloneSelectedURL.length})
+          if (user) {
+            setUser({
+              ...user,
+              totalShortenedURL:
+                user.totalShortenedURL - cloneSelectedURL.length,
+            });
           }
         } else {
           toast.error(res.data?.deleteMultipleURLbyId.message);
@@ -143,6 +146,7 @@ const GeneratedUrlSection = () => {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl">
               Your <span className="text-primary">Tiny Tiny</span> URLs
+              <div className="text-sm font-sans mt-2 text-muted-foreground">You have <span className="text-white font-medium"> {5 - urls.length} FREE</span> URL generations remaining.</div>
             </h2>
             {selectedUrls.length > 0 ? (
               <ConfirmDeleteDialog
@@ -150,7 +154,12 @@ const GeneratedUrlSection = () => {
                 deleteLoading={deleteLoading}
               />
             ) : (
-              <div title="Generate upto 5 Urls">{urls.length}/5</div>
+              <div className="flex gap-2 items-center">
+               
+                <Button variant="outline" size="icon" title="Refresh URLs views">
+                  <RefreshCw />
+                </Button>
+              </div>
             )}
           </div>
 

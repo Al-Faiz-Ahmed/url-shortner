@@ -4,7 +4,11 @@ import { GenUrlService } from "../../../services/gen-url.service";
 import { UserService } from "../../../services/user.service";
 import { CatchPrismaError } from "../../../error/prisma.error";
 import { vGenUniqueUrl } from "../../../validations/models/gen-url-validation";
-import { ForbiddenError, NotFoundError, ValidationError } from "../../../error/app.error";
+import {
+  ForbiddenError,
+  NotFoundError,
+  ValidationError,
+} from "../../../error/app.error";
 import {
   vMultipleUUIDS,
   vUserUUID,
@@ -83,10 +87,18 @@ export const genUrlMutationsResolver = {
           context,
         );
         if (userByIp) {
+          if (userByIp.totalShortenedURL >= 5) {
+            return ForbiddenError("5 URLs Generation Limit reached");
+          }
           userId = userByIp.id;
         } else {
           const user = await UserService.createUser(context);
           if (user) userId = user.id;
+        }
+      } else {
+        const user = await UserService.getUserById(userId, context);
+        if (user && user.totalShortenedURL >= 5) {
+          return ForbiddenError("5 URLs Generation Limit reached");
         }
       }
 
@@ -130,18 +142,11 @@ export const genUrlMutationsResolver = {
       context,
     );
 
-    if (
-      userTotalGeneratedURL &&
-      userTotalGeneratedURL.totalShortenedURL > 1
-    ){
-
+    if (userTotalGeneratedURL && userTotalGeneratedURL.totalShortenedURL > 1) {
       return await GenUrlService.deleteURLById(userId, urlId, context);
     }
 
-    return ForbiddenError(
-      `You can not delete last Url.`,
-    );
-
+    return ForbiddenError(`You can not delete last Url.`);
   },
 
   deleteMultipleURLbyId: async (
@@ -181,13 +186,12 @@ export const genUrlMutationsResolver = {
         context,
       );
     }
-    if(userTotalGeneratedURL && userTotalGeneratedURL.totalShortenedURL === 1){
-      return ForbiddenError(
-        `You can not delete last Url.`,
-      );
+    if (
+      userTotalGeneratedURL &&
+      userTotalGeneratedURL.totalShortenedURL === 1
+    ) {
+      return ForbiddenError(`You can not delete last Url.`);
     }
-
-    
 
     return ForbiddenError(
       `You can delete only ${urlsId.length - 1} Url at a time.`,
