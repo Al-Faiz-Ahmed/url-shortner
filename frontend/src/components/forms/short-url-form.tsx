@@ -25,8 +25,8 @@ type FormStatus = {
 };
 
 export function ShortUrlForm() {
-  const { user } = useUser();
-  const {addUrl} = useUrls()
+  const { user, setUser } = useUser();
+  const { addUrl } = useUrls();
 
   // const [items, setItems] = useLocalStorage<GeneratedURL[]>(
   //   STORAGE_KEYS.SHORTENED_URLS,
@@ -82,7 +82,10 @@ export function ShortUrlForm() {
       if (data?.generateUniqueURL) {
         const payload = data.generateUniqueURL;
         addUrl(payload);
-       
+        if (user) {
+          setUser({ ...user, totalShortenedURL: user.totalShortenedURL++ });
+        }
+
         resetForm();
       }
     } catch (error: any) {

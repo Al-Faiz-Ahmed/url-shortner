@@ -181,7 +181,7 @@ export const genUrlMutationsResolver = {
         context,
       );
     }
-    if(userTotalGeneratedURL.totalShortenedURL === 1){
+    if(userTotalGeneratedURL && userTotalGeneratedURL.totalShortenedURL === 1){
       return ForbiddenError(
         `You can not delete last Url.`,
       );
