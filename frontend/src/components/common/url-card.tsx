@@ -31,7 +31,7 @@ const UrlCard = ({
   selectedURLIds,
 }: GeneratedURL & { selectedURLIds: Set<string> }) => {
   const [isSelected, setIsSelected] = useState(false);
-  const { user } = useUser();
+  const { user,setUser } = useUser();
   const [deleteURLbyIdMutaion, { loading: deleteLoading }] = useMutation<
     DeleteURLResponse,
     DeleteURLVariables
@@ -65,6 +65,9 @@ const UrlCard = ({
         if(res.data?.deleteURLbyId.isDeleted){
 
           removeUrlByid(id);
+          if(user){
+            setUser({...user,totalShortenedURL:user.totalShortenedURL - 1})
+          }
           toast.success(
             res.data?.deleteURLbyId.message || "URL deleted successfully",
           );

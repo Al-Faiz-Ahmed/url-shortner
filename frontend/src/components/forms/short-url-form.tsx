@@ -83,7 +83,7 @@ export function ShortUrlForm() {
         const payload = data.generateUniqueURL;
         addUrl(payload);
         if (user) {
-          setUser({ ...user, totalShortenedURL: user.totalShortenedURL++ });
+          setUser({ ...user, totalShortenedURL: user.totalShortenedURL+1 });
         }
 
         resetForm();

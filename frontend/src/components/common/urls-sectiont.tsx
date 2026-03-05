@@ -118,6 +118,9 @@ const GeneratedUrlSection = () => {
           toast.success("All Selected URL deleted successfully");
           removeAllSelectedUrl()
           removeMultipleURLS(cloneSelectedURL);
+          if(user){
+            setUser({...user,totalShortenedURL:user.totalShortenedURL - cloneSelectedURL.length})
+          }
         } else {
           toast.error(res.data?.deleteMultipleURLbyId.message);
         }
