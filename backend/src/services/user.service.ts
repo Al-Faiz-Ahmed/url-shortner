@@ -16,7 +16,6 @@ export class UserService {
     } catch (err) {
       console.log("Error from Creating User", err);
       CatchPrismaError(err);
-      
     }
   }
 
@@ -50,13 +49,14 @@ export class UserService {
     } catch (err) {
       console.log("Error from Creating User", err);
       CatchPrismaError(err);
-      
     }
   }
 
   public static async updateUserTotalShortendURL(
     userId: string,
     context: GraphQLContext,
+    type: "increment" | "decrement" = "increment",
+    updatedNumber: number = 1,
   ) {
     const { prisma } = context;
     try {
@@ -65,7 +65,10 @@ export class UserService {
           id: userId,
         },
         data: {
-          totalShortenedURL: { increment: 1 },
+          totalShortenedURL:
+            type === "increment"
+              ? { increment: updatedNumber }
+              : { decrement: updatedNumber },
         },
       });
     } catch (err) {

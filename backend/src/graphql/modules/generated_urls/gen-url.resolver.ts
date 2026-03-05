@@ -4,7 +4,7 @@ import { GenUrlService } from "../../../services/gen-url.service";
 import { UserService } from "../../../services/user.service";
 import { CatchPrismaError } from "../../../error/prisma.error";
 import { vGenUniqueUrl } from "../../../validations/models/gen-url-validation";
-import { NotFoundError, ValidationError } from "../../../error/app.error";
+import { ForbiddenError, NotFoundError, ValidationError } from "../../../error/app.error";
 import {
   vMultipleUUIDS,
   vUserUUID,
@@ -108,7 +108,7 @@ export const genUrlMutationsResolver = {
     payload: { input: { userId: string; urlId: string } },
     context: GraphQLContext,
   ) => {
-    const {urlId,userId} = payload.input
+    const { urlId, userId } = payload.input;
     let response = vUserUUID.safeParse({ userId });
 
     if (response.success === false) {
@@ -117,7 +117,7 @@ export const genUrlMutationsResolver = {
       return ValidationError(schemaErr);
     }
 
-    response = vUserUUID.safeParse({ userId:urlId });
+    response = vUserUUID.safeParse({ userId: urlId });
 
     if (response.success === false) {
       const schemaErr =
@@ -125,7 +125,23 @@ export const genUrlMutationsResolver = {
       return ValidationError(schemaErr);
     }
 
-    return await GenUrlService.deleteURLById(userId,urlId, context);
+    const userTotalGeneratedURL = await UserService.getUserById(
+      userId,
+      context,
+    );
+
+    if (
+      userTotalGeneratedURL &&
+      userTotalGeneratedURL.totalShortenedURL > 1
+    ){
+
+      return await GenUrlService.deleteURLById(userId, urlId, context);
+    }
+
+    return ForbiddenError(
+      `You can not delete last Url.`,
+    );
+
   },
 
   deleteMultipleURLbyId: async (
@@ -133,9 +149,7 @@ export const genUrlMutationsResolver = {
     payload: { input: { userId: string; urlsId: string[] } },
     context: GraphQLContext,
   ) => {
-    const {
-      urlsId,userId
-    } = payload.input;
+    const { urlsId, userId } = payload.input;
 
     const responseId = vMultipleUUIDS.safeParse({ uuids: urlsId });
 
@@ -153,7 +167,31 @@ export const genUrlMutationsResolver = {
       return ValidationError(schemaErr);
     }
 
-    return await GenUrlService.deleteMultipleURLsById(userId,urlsId, context);
+    const userTotalGeneratedURL = await UserService.getUserById(
+      userId,
+      context,
+    );
+    if (
+      userTotalGeneratedURL &&
+      urlsId.length < userTotalGeneratedURL.totalShortenedURL
+    ) {
+      return await GenUrlService.deleteMultipleURLsById(
+        userId,
+        urlsId,
+        context,
+      );
+    }
+    if(userTotalGeneratedURL.totalShortenedURL === 1){
+      return ForbiddenError(
+        `You can not delete last Url.`,
+      );
+    }
+
+    
+
+    return ForbiddenError(
+      `You can delete only ${urlsId.length - 1} Url at a time.`,
+    );
   },
 
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,

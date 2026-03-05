@@ -12,6 +12,7 @@ import {
   vMultipleUUIDS,
   vUserUUID,
 } from "../validations/models/user-validation";
+import { UserService } from "./user.service";
 
 export class GenUrlService {
   /** Resolve short code to original URL; returns null if not found or blocked. */
@@ -63,6 +64,9 @@ export class GenUrlService {
 
     return prisma.generatedURL.findMany({
       where: { userId },
+      orderBy: {
+        updatedAt: "desc",
+      }
     });
   }
 
@@ -133,6 +137,7 @@ export class GenUrlService {
 
       console.log(deletedURL,"deletedURLS")
       if (deletedURL) {
+        await UserService.updateUserTotalShortendURL(userId, context,"decrement");
         return {
           isDeleted: true,
           message: "URL Successfully Deleted",
@@ -177,6 +182,7 @@ export class GenUrlService {
 
 
       if (deletedURLs && deletedURLs.count > 0 ) {
+        await UserService.updateUserTotalShortendURL(userId, context,"decrement",uuids.length);
         return {
           isDeleted: true,
           message: "URLs Successfully Deleted",
