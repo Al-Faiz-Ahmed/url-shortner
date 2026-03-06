@@ -3,7 +3,7 @@ import {
   type GetUserResponse,
   type GetUserVariables,
 } from "@/graphql/queries/get-user";
-import { useUrls, useUser } from "@/hooks";
+import { useLocalStorage, useUrls, useUser } from "@/hooks";
 import { useLazyQuery, useMutation } from "@apollo/client/react";
 import { RefreshCw, Trash2 } from "lucide-react";
 
@@ -31,14 +31,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 const GeneratedUrlSection = () => {
+  const [re_fetch_timer, set_refetch_timer] = useLocalStorage(
+    STORAGE_KEYS.RE_FETCH_THROTTLE,
+    0,
+  );
   const [fetchUser] = useLazyQuery<GetUserResponse, GetUserVariables>(
     GET_USER_QUERY,
   );
-  const [fetchUrls] = useLazyQuery<GetUrlsResponse, GetUrlsVariables>(
-    GET_URL_BY_ID_QUERY,
-  );
+  const [fetchUrls, { loading: fetchUrlLoading }] = useLazyQuery<
+    GetUrlsResponse,
+    GetUrlsVariables
+  >(GET_URL_BY_ID_QUERY, { fetchPolicy: "no-cache" });
 
   const [deleteMultipleURlById, { loading: deleteLoading }] = useMutation<
     DeleteMultipleURLResponse,
@@ -133,8 +139,31 @@ const GeneratedUrlSection = () => {
       });
   };
 
+  const updatedUrlsFetched = async () => {
+    console.log("updatedFetch", user, fetchUrlLoading);
+
+    if (!user || fetchUrlLoading) return;
+
+    const currentTimeStamp = Date.now();
+    const throttle_time = (currentTimeStamp - re_fetch_timer) / 1000;
+    if (re_fetch_timer === 0 || throttle_time >= 90) {
+      await fetchUrls({ variables: { userId: user.id } })
+        .then((res) => {
+          if (res.data) {
+            setUrls(res.data?.getAllUrl);
+          }
+        })
+        .catch((err) => {})
+        .finally(() => {
+          set_refetch_timer(Date.now());
+        });
+    } else {
+      toast(`Wait till ${Math.ceil(90 - throttle_time)} Secs For Next Urls Refresh `);
+    }
+  };
+
   return (
-    <section className="pt-24  px-4">
+    <section className="pt-20  px-4">
       {!user || urls.length < 1 ? (
         <p className="text-md md:text-lg leading-relaxed text-muted-foreground/80 w-fit mx-auto text-center">
           Create your first <span className="text-primary">Tini Tiny </span>
@@ -143,10 +172,23 @@ const GeneratedUrlSection = () => {
         </p>
       ) : (
         <div>
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl">
               Your <span className="text-primary">Tiny Tiny</span> URLs
-              <div className="text-sm font-sans mt-2 text-muted-foreground">You have <span className="text-white font-medium"> {5 - urls.length} FREE</span> URL generations remaining.</div>
+              {urls.length >= 5 ? (
+                <div className="text-sm font-sans mt-2 text-white">
+                  Free URL generations limit exceeded.
+                </div>
+              ) : (
+                <div className="text-sm font-sans mt-2 text-muted-foreground">
+                  You have{" "}
+                  <span className="text-white font-medium">
+                    {" "}
+                    {5 - urls.length} FREE
+                  </span>{" "}
+                  URL generations remaining.
+                </div>
+              )}
             </h2>
             {selectedUrls.length > 0 ? (
               <ConfirmDeleteDialog
@@ -155,8 +197,12 @@ const GeneratedUrlSection = () => {
               />
             ) : (
               <div className="flex gap-2 items-center">
-               
-                <Button variant="outline" size="icon" title="Refresh URLs views">
+                <Button
+                  onClick={updatedUrlsFetched}
+                  variant="outline"
+                  size="icon"
+                  title="Refresh URLs views"
+                >
                   <RefreshCw />
                 </Button>
               </div>

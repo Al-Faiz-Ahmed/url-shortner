@@ -46,6 +46,13 @@ export function ShortUrlForm() {
       url: string;
     }>,
   ) => {
+    const { resetForm, setStatus } = helpers;
+
+    if(user && user.totalShortenedURL >= 5){
+      setStatus({ error: "5 URLs Generation Limit reached" });
+      return;
+    }
+
     const uniqueHashRes = createUniqueHash(5);
 
     if (uniqueHashRes.uniqueHash === null) {
@@ -60,7 +67,7 @@ export function ShortUrlForm() {
       userId = user.id;
     }
 
-    const { resetForm, setStatus } = helpers;
+    
     setStatus({});
 
     try {
@@ -123,7 +130,7 @@ export function ShortUrlForm() {
                           meta.touched && meta.error ? "url-error" : undefined
                         }
                       />
-                      {meta.touched && meta.error && (
+                      {!status?.error && meta.touched && meta.error && (
                         <p
                           id="url-error"
                           className="text-xs text-destructive text-left"
