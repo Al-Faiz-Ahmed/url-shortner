@@ -32,6 +32,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { STORAGE_KEYS } from "@/utils/constants";
+import type { GeneratedURL } from "@/types";
 
 const GeneratedUrlSection = () => {
   const [re_fetch_timer, set_refetch_timer] = useLocalStorage(
@@ -61,8 +62,6 @@ const GeneratedUrlSection = () => {
   } = useUrls();
 
   const newSelectedURLset = new Set(selectedUrls);
-
-  // const {} = useUrlActions()
 
   useEffect(() => {
     (async () => {
@@ -158,9 +157,22 @@ const GeneratedUrlSection = () => {
           set_refetch_timer(Date.now());
         });
     } else {
-      toast(`Wait till ${Math.ceil(90 - throttle_time)} Secs For Next Urls Refresh `);
+      toast(
+        `Wait till ${Math.ceil(90 - throttle_time)} Secs For Next Urls Refresh `,
+      );
     }
   };
+
+  let blockedUrls: GeneratedURL[] = [];
+  let workingUrls: GeneratedURL[] = [];
+  urls.forEach((url) => {
+    if (url.isBlock) {
+      blockedUrls.push(url);
+    } else {
+      workingUrls.push(url);
+    }
+  });
+  // let blockedURLs = urls.length > 0 ? urls.filter((url) => url.isBlock) : [];
 
   return (
     <section className="pt-20  px-4">
@@ -203,14 +215,16 @@ const GeneratedUrlSection = () => {
                   size="icon"
                   title="Refresh URLs views"
                 >
-                  <RefreshCw />
+                  <RefreshCw
+                    className={fetchUrlLoading ? "animate-spin" : ""}
+                  />
                 </Button>
               </div>
             )}
           </div>
 
-          <div className="space-y-4">
-            {urls.map((url) => (
+          <div className="space-y-4 mb-6">
+            {workingUrls.map((url) => (
               <UrlCard
                 key={url.id}
                 {...url}
@@ -218,6 +232,22 @@ const GeneratedUrlSection = () => {
               />
             ))}
           </div>
+
+          {blockedUrls.length > 0 && (
+            <>
+              <p className="text-primary mb-3 text-lg">Blocked Urls</p>
+              <div className="space-y-4">
+                {blockedUrls.map((url) => (
+                  <UrlCard
+                  
+                    key={url.id}
+                    {...url}
+                    selectedURLIds={newSelectedURLset}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       )}
     </section>

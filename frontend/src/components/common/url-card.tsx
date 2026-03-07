@@ -27,6 +27,7 @@ const UrlCard = ({
   generatedURL,
   givenURL,
   id,
+  isBlock,
   totalVisitors,
   selectedURLIds,
 }: GeneratedURL & { selectedURLIds: Set<string> }) => {
@@ -50,6 +51,8 @@ const UrlCard = ({
     }
     setIsSelected((preState) => !preState);
   };
+
+
 
   const deleteHandler = async () => {
     console.log("deleteHandler");
@@ -88,7 +91,7 @@ const UrlCard = ({
 
   return (
     <div>
-      <div className="flex border border-gray-400 p-3 py-2 rounded-md gap-3 items-center">
+      <div className={`flex border  ${isBlock ? "border-muted-foreground opacity-80": "border-gray-400"} p-3 py-2 rounded-md gap-3 items-center`}>
         <div className="p-0.5 self-start">
           {selectedUrlsLength !== urlsLength - 1 || selectedURLIds.has(id) ? (
             <button
@@ -110,7 +113,7 @@ const UrlCard = ({
             href={generatedURL}
             target="_blank"
             referrerPolicy="no-referrer"
-            className="mb-1 inline-block text-base"
+            className={`${isBlock ? "text-muted-foreground": ""} mb-1 inline-block text-base`}
             rel="noreferrer"
           >
             {generatedURL}
@@ -140,7 +143,7 @@ const UrlCard = ({
             )}
           </div>
           {selectedUrlsLength < 1 && (
-            <UrlCardActions onDelete={deleteHandler} onEdit={editHandler} />
+            <UrlCardActions isBlock={isBlock} onDelete={deleteHandler} onEdit={editHandler} />
           )}
         </div>
       </div>
@@ -153,16 +156,18 @@ export default UrlCard;
 const UrlCardActions = ({
   onDelete,
   onEdit,
+  isBlock
 }: {
   onDelete: () => void;
   onEdit: () => void;
+  isBlock:boolean
 }) => {
   const { urls } = useUrls();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
-          <EllipsisVertical />
+          <EllipsisVertical className={isBlock ? "text-muted-foreground": ""} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
