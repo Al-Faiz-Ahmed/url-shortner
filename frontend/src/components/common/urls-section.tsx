@@ -4,8 +4,8 @@ import {
   type GetUserVariables,
 } from "@/graphql/queries/get-user";
 import { useLocalStorage, useUrls, useUser } from "@/hooks";
-import { useLazyQuery, useMutation } from "@apollo/client/react";
-import { RefreshCw, Trash2 } from "lucide-react";
+import { useLazyQuery } from "@apollo/client/react";
+import { RefreshCw } from "lucide-react";
 
 import { useEffect } from "react";
 import { Button } from "../ui/button";
@@ -15,24 +15,13 @@ import {
   type GetUrlsResponse,
   type GetUrlsVariables,
 } from "@/graphql/queries/get-urls";
-import {
-  DELETE_MULTIPLE_URL_BY_ID_MUTATION,
-  type DeleteMultipleURLResponse,
-  type DeleteMultipleURLVariables,
-} from "@/graphql/mutations/gen-short-url";
+
 import { toast } from "sonner";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import { STORAGE_KEYS } from "@/utils/constants";
 import type { GeneratedURL } from "@/types";
+import ConfirmDeleteDialog from "../shared/dialogs/confirm-delete-all";
+import UrlSectionHeader from "../layout/url-section-header";
 
 const GeneratedUrlSection = () => {
   const [re_fetch_timer, set_refetch_timer] = useLocalStorage(
@@ -47,19 +36,8 @@ const GeneratedUrlSection = () => {
     GetUrlsVariables
   >(GET_URL_BY_ID_QUERY, { fetchPolicy: "no-cache" });
 
-  const [deleteMultipleURlById, { loading: deleteLoading }] = useMutation<
-    DeleteMultipleURLResponse,
-    DeleteMultipleURLVariables
-  >(DELETE_MULTIPLE_URL_BY_ID_MUTATION);
-
   const { user, setUser } = useUser();
-  const {
-    urls,
-    setUrls,
-    selectedUrls,
-    removeAllSelectedUrl,
-    removeMultipleURLS,
-  } = useUrls();
+  const { urls, setUrls, selectedUrls } = useUrls();
 
   const newSelectedURLset = new Set(selectedUrls);
 
@@ -103,40 +81,6 @@ const GeneratedUrlSection = () => {
       }
     })();
   }, []);
-
-  const handleDeleteAll = async () => {
-    console.log("deleteHandler");
-
-    if (!user || deleteLoading) return;
-
-    const cloneSelectedURL = [...selectedUrls];
-
-    await deleteMultipleURlById({
-      variables: {
-        userId: user?.id || "",
-        urlsId: selectedUrls,
-      },
-    })
-      .then((res) => {
-        if (res?.data?.deleteMultipleURLbyId?.isDeleted) {
-          toast.success("All Selected URL deleted successfully");
-          removeAllSelectedUrl();
-          removeMultipleURLS(cloneSelectedURL);
-          if (user) {
-            setUser({
-              ...user,
-              totalShortenedURL:
-                user.totalShortenedURL - cloneSelectedURL.length,
-            });
-          }
-        } else {
-          toast.error(res.data?.deleteMultipleURLbyId.message);
-        }
-      })
-      .catch((err) => {
-        toast.error(err.errors[0].message || "Something Went Wrong!");
-      });
-  };
 
   const updatedUrlsFetched = async () => {
     console.log("updatedFetch", user, fetchUrlLoading);
@@ -186,44 +130,11 @@ const GeneratedUrlSection = () => {
         </p>
       ) : (
         <div>
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl">
-              Your <span className="text-primary">Tiny Tiny</span> URLs
-              {urls.length >= 5 ? (
-                <div className="text-sm font-sans mt-2 text-white">
-                  Free URL generations limit exceeded.
-                </div>
-              ) : (
-                <div className="text-sm font-sans mt-2 text-muted-foreground">
-                  You have{" "}
-                  <span className="text-white font-medium">
-                    {" "}
-                    {5 - urls.length} FREE
-                  </span>{" "}
-                  URL generations remaining.
-                </div>
-              )}
-            </h2>
-            {selectedUrls.length > 0 ? (
-              <ConfirmDeleteDialog
-                handleDeleteAll={handleDeleteAll}
-                deleteLoading={deleteLoading}
-              />
-            ) : (
-              <div className="flex gap-2 items-center">
-                <Button
-                  onClick={updatedUrlsFetched}
-                  variant="outline"
-                  size="icon"
-                  title="Refresh URLs views"
-                >
-                  <RefreshCw
-                    className={fetchUrlLoading ? "animate-spin" : ""}
-                  />
-                </Button>
-              </div>
-            )}
-          </div>
+          <UrlSectionHeader
+            fetchUrlLoading={fetchUrlLoading}
+            updatedUrlsFetched={updatedUrlsFetched}
+          />
+          
 
           <div className="space-y-4 mb-6">
             {workingUrls.map((url) => (
@@ -256,52 +167,3 @@ const GeneratedUrlSection = () => {
 };
 
 export default GeneratedUrlSection;
-
-const ConfirmDeleteDialog = ({
-  handleDeleteAll,
-  deleteLoading,
-}: {
-  handleDeleteAll: () => void;
-  deleteLoading: boolean;
-}) => {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          // onMouseUp={handleDeleteAll}
-          className="cursor-pointer"
-          variant="destructive"
-          size="sm"
-          title={`${deleteLoading}`}
-          disabled={deleteLoading}
-        >
-          <Trash2 /> Delete All
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your all
-            selected URLs data from our servers.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
-          <Button
-            onMouseUp={handleDeleteAll}
-            className="cursor-pointer"
-            variant="destructive"
-            size="sm"
-            title={`${deleteLoading}`}
-            disabled={deleteLoading}
-          >
-            <Trash2 /> Delete
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-};
