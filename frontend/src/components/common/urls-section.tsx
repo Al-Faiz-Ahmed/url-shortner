@@ -144,6 +144,7 @@ const GeneratedUrlSection = () => {
     if (!user || fetchUrlLoading) return;
 
     const currentTimeStamp = Date.now();
+
     const throttle_time = (currentTimeStamp - re_fetch_timer) / 1000;
     if (re_fetch_timer === 0 || throttle_time >= 90) {
       await fetchUrls({ variables: { userId: user.id } })
@@ -174,7 +175,7 @@ const GeneratedUrlSection = () => {
       workingUrls.push(url);
     }
   });
- 
+
   return (
     <section className="pt-20  px-4">
       {!user || urls.length < 1 ? (
@@ -240,7 +241,6 @@ const GeneratedUrlSection = () => {
               <div className="space-y-4">
                 {blockedUrls.map((url) => (
                   <UrlCard
-                  
                     key={url.id}
                     {...url}
                     selectedURLIds={newSelectedURLset}
