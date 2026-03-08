@@ -5,10 +5,9 @@ import {
 } from "@/graphql/queries/get-user";
 import { useLocalStorage, useUrls, useUser } from "@/hooks";
 import { useLazyQuery } from "@apollo/client/react";
-import { RefreshCw } from "lucide-react";
 
 import { useEffect } from "react";
-import { Button } from "../ui/button";
+
 import UrlCard from "./url-card";
 import {
   GET_URL_BY_ID_QUERY,
@@ -20,7 +19,6 @@ import { toast } from "sonner";
 
 import { STORAGE_KEYS } from "@/utils/constants";
 import type { GeneratedURL } from "@/types";
-import ConfirmDeleteDialog from "../shared/dialogs/confirm-delete-all";
 import UrlSectionHeader from "../layout/url-section-header";
 
 const GeneratedUrlSection = () => {

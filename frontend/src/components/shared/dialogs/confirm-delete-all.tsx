@@ -1,4 +1,4 @@
-import React from "react";
+
 import {
   DialogTrigger,
   Dialog,
@@ -28,8 +28,6 @@ const ConfirmDeleteDialog = () => {
 
   const { user, setUser } = useUser();
   const {
-    urls,
-    setUrls,
     selectedUrls,
     removeAllSelectedUrl,
     removeMultipleURLS,
