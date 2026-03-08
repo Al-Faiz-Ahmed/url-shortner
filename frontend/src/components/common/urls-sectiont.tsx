@@ -152,7 +152,9 @@ const GeneratedUrlSection = () => {
             setUrls(res.data?.getAllUrl);
           }
         })
-        .catch((err) => {})
+        .catch((err) => {
+          toast(err.errors[0].message || "Something Went Wrong!");
+        })
         .finally(() => {
           set_refetch_timer(Date.now());
         });
