@@ -18,7 +18,7 @@ export function globalMiddleWareController  (app: Express) {
         if (!origin || allowedOrigins.includes(origin)) {
           callback(null, true);
         } else {
-          callback(new Error(`CORS policy: origin ${origin} not allowed`));
+          callback(null,false);
         }
       },
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
