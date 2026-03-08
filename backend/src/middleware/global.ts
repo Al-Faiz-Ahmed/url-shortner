@@ -3,9 +3,29 @@ import express from "express";
 import cors from "cors";
 import ipAddressMiddleware from "./ip-address";
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://tini-tiny.vercel.app"
+];
+
 export function globalMiddleWareController  (app: Express) {
-  app.use(express.json());
+  
   app.set('trust proxy', 'loopback')
-  app.use(cors());
+  app.use(cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true
+  }));
+  app.options("*", cors());
+  app.use(express.json());
   app.use(ipAddressMiddleware);
 }

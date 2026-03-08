@@ -1,13 +1,13 @@
 import { Header } from "@/components/layout/header";
 import { ShortUrlForm } from "@/components/forms/short-url-form";
-import GeneratedUrlSection from "@/components/common/urls-sectiont";
+import GeneratedUrlSection from "@/components/common/urls-section";
 
 export function Home() {
   return (
     <div>
       <Header />
 
-      <section className="w-full max-w-2xl mx-auto gap-8  bg-red pt-4">
+      <section className="w-full max-w-2xl mx-auto gap-8 bg-red pt-4">
         <div className="space-y-4 text-center mb-6 md:mb-8">
           <p className="text-foreground text-xl md:text-2xl">
             Get rid of your LOOOOOONG url !
@@ -19,8 +19,6 @@ export function Home() {
         <ShortUrlForm />
 
         <GeneratedUrlSection />
-
-        
       </section>
     </div>
   );

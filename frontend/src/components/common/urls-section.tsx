@@ -174,8 +174,7 @@ const GeneratedUrlSection = () => {
       workingUrls.push(url);
     }
   });
-  // let blockedURLs = urls.length > 0 ? urls.filter((url) => url.isBlock) : [];
-
+ 
   return (
     <section className="pt-20  px-4">
       {!user || urls.length < 1 ? (

@@ -28,11 +28,6 @@ export function ShortUrlForm() {
   const { user, setUser } = useUser();
   const { addUrl } = useUrls();
 
-  // const [items, setItems] = useLocalStorage<GeneratedURL[]>(
-  //   STORAGE_KEYS.SHORTENED_URLS,
-  //   [],
-  // );
-
   const [createShortUrl, { loading }] = useMutation<
     CreateShortUrlResponse,
     CreateShortUrlVariables
@@ -67,7 +62,6 @@ export function ShortUrlForm() {
       userId = user.id;
     }
 
-    
     setStatus({});
 
     try {
@@ -96,12 +90,10 @@ export function ShortUrlForm() {
         resetForm();
       }
     } catch (error: any) {
-      // const message = graphqlErrorHandler(error);
+      
       setStatus({ error: error ? error.message : "" });
     }
   };
-
-  // const latest = items.length ? items[items.length - 1] : undefined;
 
   return (
     <div className="w-full max-w-2xl px-4">
