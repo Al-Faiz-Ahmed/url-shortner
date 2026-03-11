@@ -6,24 +6,16 @@ export function comparePsqlDates(
   ts2: string
 ): boolean {
 
-  const d1 = new Date(ts1.replace(" ", "T"));
-  const d2 = new Date(ts2.replace(" ", "T"));
+  const normalize = (ts: string) => new Date(ts.replace(" ", "T")).getTime();
 
-  const t1 = d1.getTime();
-  const t2 = d2.getTime();
+  const t1 = normalize(ts1);
+  const t2 = normalize(ts2);
 
   switch (operator) {
-    case "==":
-      return t1 === t2;
-    case ">":
-      return t1 > t2;
-    case ">=":
-      return t1 >= t2;
-    case "<":
-      return t1 < t2;
-    case "<=":
-      return t1 <= t2;
-    default:
-      throw new Error("Invalid operator");
+    case "==": return t1 === t2;
+    case ">": return t1 > t2;
+    case ">=": return t1 >= t2;
+    case "<": return t1 < t2;
+    case "<=": return t1 <= t2;
   }
 }
