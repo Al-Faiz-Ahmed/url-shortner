@@ -1,4 +1,4 @@
-export function generatePostgresTimestamp(daysToAdd = 0) {
+export function generatePsqlDate(daysToAdd = 0) {
   const d = new Date();
 
   // add days if provided

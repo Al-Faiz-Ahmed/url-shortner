@@ -13,8 +13,8 @@ import {
   vUserUUID,
 } from "../validations/models/user-validation";
 import { UserService } from "./user.service";
-import { comparePostgresTimestamps } from "../lib/utils/diff-psql-timstamp";
-import { generatePostgresTimestamp } from "../lib/utils/gen-psql-date";
+import {  comparePsqlDates } from "../lib/utils/compare-psql-dates";
+import { generatePsqlDate } from "../lib/utils/gen-psql-date";
 
 export class GenUrlService {
   /** Resolve short code to original URL; returns null if not found or blocked. */
@@ -25,14 +25,16 @@ export class GenUrlService {
       where: { uniqueHash },
       select: { givenURL: true, isBlock: true,expirationDate:true },
     });
+
+
     if (!record || record.isBlock) return null;
 
-    if(record && comparePostgresTimestamps(generatePostgresTimestamp(),">",`${record.expirationDate}`)){
+    if(comparePsqlDates(generatePsqlDate(),">",`${record.expirationDate}`)){
       await prisma.generatedURL.update({
         where: { uniqueHash },
         data: { isBlock:true },
       });
-      
+
       return null
     }
 

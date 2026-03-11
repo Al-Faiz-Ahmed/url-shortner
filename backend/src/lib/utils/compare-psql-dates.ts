@@ -1,6 +1,6 @@
 type TimestampOperator = "==" | ">" | ">=" | "<" | "<=";
 
-export function comparePostgresTimestamps(
+export function comparePsqlDates(
   ts1: string,
   operator: TimestampOperator,
   ts2: string
