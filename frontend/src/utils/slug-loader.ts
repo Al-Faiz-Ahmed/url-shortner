@@ -21,9 +21,9 @@ export async function slugLoader({
     const data = await res.json(); // expects { originalUrl: "https://..." }
     console.log('calling',res)
 
-    return data
+    // return data
     // Hard redirect — the browser never even renders the page
-    // return redirect(data.originalUrl);
+    return redirect(data.data);
   
     // ── ALTERNATIVE: soft redirect inside the component ──────────────────────
     // If you want to show a "redirecting…" screen first, comment out the line

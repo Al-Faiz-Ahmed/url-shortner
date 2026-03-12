@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
   {
     path: "/:slug",
     element: <SlugPage />,
-    hydrateFallbackElement:'<p>faizan</p>',
+    // hydrateFallbackElement:'<p>faizan</p>',
     loader: slugLoader,          // fetches + resolves before render
     errorElement: <NotFound />,  // shown if loader throws
   },
