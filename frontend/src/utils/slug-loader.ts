@@ -6,7 +6,7 @@ export async function slugLoader({
   }: LoaderFunctionArgs) {
     const { slug } = params;
   
-    const res = await fetch(`${envConfig}/${slug}`); // 👈 adjust to your API endpoint
+    const res = await fetch(`${envConfig.BACKEND_API_URL}/${slug}`); // 👈 adjust to your API endpoint
     
   
     if (res.status === 404) {
@@ -17,10 +17,13 @@ export async function slugLoader({
       throw new Response("Something went wrong", { status: res.status });
     }
   
+    console.log(res)
     const data = await res.json(); // expects { originalUrl: "https://..." }
     console.log('calling',res)
+
+    return data
     // Hard redirect — the browser never even renders the page
-    return redirect(data.originalUrl);
+    // return redirect(data.originalUrl);
   
     // ── ALTERNATIVE: soft redirect inside the component ──────────────────────
     // If you want to show a "redirecting…" screen first, comment out the line
