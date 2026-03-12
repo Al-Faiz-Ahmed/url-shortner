@@ -38,7 +38,7 @@ const errorLink = new ErrorLink(({ error, operation }) => {
 
 // 2. HTTP Link to your Express Server
 const httpLink = new HttpLink({
-  uri: envConfig.BACKEND_API_URL, // Your Express endpoint
+  uri: envConfig.BACKEND_API_URL + "/graphql", // Your Express endpoint
 });
 
 // 3. Initialize Apollo Client

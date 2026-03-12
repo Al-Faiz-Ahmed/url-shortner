@@ -35,7 +35,7 @@ app.get("/*splat", async (req: Request, res: Response) => {
   if (!originalUrl) {
     return res.status(404).json({ error: "Short link not found or blocked by provider" });
   }
-  res.redirect(302, originalUrl);
+  res.json(originalUrl);
 });
 
 
