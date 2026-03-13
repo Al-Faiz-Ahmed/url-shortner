@@ -8,11 +8,11 @@ export function createUniqueHash(
     };
   }
 
-  let shuffledString =
+  const shuffledString =
     "ewEkY3FuaM0HZlC1Os7S42thpmyAPiI9Rf6bnDXqLcBdTGJoUr5gKNQ8VvzWjx";
   let newString = "";
   for (let i = 0; i < length; i++) {
-    let randomPickNumber = Math.floor(Math.random() * shuffledString.length);
+    const randomPickNumber = Math.floor(Math.random() * shuffledString.length);
 
     newString += shuffledString[randomPickNumber];
   }

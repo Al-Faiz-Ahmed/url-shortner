@@ -108,8 +108,8 @@ const GeneratedUrlSection = () => {
     }
   };
 
-  let blockedUrls: GeneratedURL[] = [];
-  let workingUrls: GeneratedURL[] = [];
+  const blockedUrls: GeneratedURL[] = [];
+  const workingUrls: GeneratedURL[] = [];
   urls.forEach((url) => {
     if (url.isBlock) {
       blockedUrls.push(url);
