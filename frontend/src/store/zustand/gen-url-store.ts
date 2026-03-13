@@ -13,7 +13,7 @@ export const useUrlStore = create<UrlState>()(
         selectedUrls: [],
 
         // Synchronous Actions
-        setUrls: (urls) => set({ generatedURLs: urls }, false, "setUrls"),
+        setUrls: (urls) => set({ generatedURLs: [...urls] }, false, "setUrls"),
 
         addUrl: (url) =>
           set(
