@@ -22,7 +22,6 @@ import {
   type DeleteURLVariables,
 } from "@/graphql/mutations/gen-short-url";
 import { toast } from "sonner";
-import { envConfig } from "@/config/env-config";
 
 const UrlCard = ({
   generatedURL,
@@ -31,8 +30,6 @@ const UrlCard = ({
   isBlock,
   totalVisitors,
   selectedURLIds,
-  expirationDate,
-  uniqueHash
 }: GeneratedURL & { selectedURLIds: Set<string> }) => {
   const [isSelected, setIsSelected] = useState(false);
   const { user,setUser } = useUser();
@@ -113,8 +110,8 @@ const UrlCard = ({
         </div>
         <div>
           <a
-            // href={generatedURL}
-            href={`${import.meta.env.VITE_PUBLIC_URL}/${uniqueHash}`}
+            href={generatedURL}
+            // href={`${import.meta.env.VITE_PUBLIC_URL}/${uniqueHash}`}
             target="_blank"
             referrerPolicy="no-referrer"
             className={`${isBlock ? "text-muted-foreground": ""} mb-1 inline-block text-base`}
