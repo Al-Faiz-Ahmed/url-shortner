@@ -14,7 +14,7 @@ export class UserService {
         },
       });
     } catch (err) {
-      console.log("Error from Creating User", err);
+      console.log("Error from get User by id", err);
       CatchPrismaError(err);
     }
   }
@@ -72,7 +72,7 @@ export class UserService {
         },
       });
     } catch (err) {
-      console.log("Error from Creating User", err);
+      console.log("Error from update total shortned url", err);
       CatchPrismaError(err);
     }
   }

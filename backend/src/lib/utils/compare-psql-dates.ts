@@ -6,10 +6,11 @@ export function comparePsqlDates(
   ts2: string
 ): boolean {
 
-  const normalize = (ts: string) => new Date(ts.replace(" ", "T")).getTime();
+  const normalize = (ts: string) => new Date(ts).getTime();
 
   const t1 = normalize(ts1);
   const t2 = normalize(ts2);
+
 
   switch (operator) {
     case "==": return t1 === t2;

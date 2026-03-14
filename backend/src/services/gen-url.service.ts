@@ -13,7 +13,7 @@ import {
   vUserUUID,
 } from "../validations/models/user-validation";
 import { UserService } from "./user.service";
-import {  comparePsqlDates } from "../lib/utils/compare-psql-dates";
+import { comparePsqlDates } from "../lib/utils/compare-psql-dates";
 import { generatePsqlDate } from "../lib/utils/gen-psql-date";
 
 export class GenUrlService {
@@ -23,19 +23,18 @@ export class GenUrlService {
   ): Promise<string | null> {
     const record = await prisma.generatedURL.findUnique({
       where: { uniqueHash },
-      select: { givenURL: true, isBlock: true,expirationDate:true },
+      select: { givenURL: true, isBlock: true, expirationDate: true },
     });
-
 
     if (!record || record.isBlock) return null;
 
-    if(comparePsqlDates(generatePsqlDate(),">",`${record.expirationDate}`)){
+    if (comparePsqlDates(generatePsqlDate(), ">", `${record.expirationDate}`)) {
       await prisma.generatedURL.update({
         where: { uniqueHash },
-        data: { isBlock:true },
+        data: { isBlock: true },
       });
 
-      return null
+      return null;
     }
 
     await prisma.generatedURL.update({
@@ -79,7 +78,7 @@ export class GenUrlService {
       where: { userId },
       orderBy: {
         updatedAt: "desc",
-      }
+      },
     });
   }
 
@@ -148,9 +147,12 @@ export class GenUrlService {
         select: { id: true },
       });
 
-      console.log(deletedURL,"deletedURLS")
       if (deletedURL) {
-        await UserService.updateUserTotalShortendURL(userId, context,"decrement");
+        await UserService.updateUserTotalShortendURL(
+          userId,
+          context,
+          "decrement",
+        );
         return {
           isDeleted: true,
           message: "URL Successfully Deleted",
@@ -166,7 +168,7 @@ export class GenUrlService {
     }
   }
   public static async deleteMultipleURLsById(
-    userId:string,
+    userId: string,
     uuids: string[],
     context: GraphQLContext,
   ) {
@@ -189,13 +191,17 @@ export class GenUrlService {
           id: {
             in: uuids,
           },
-          userId
+          userId,
         },
       });
 
-
-      if (deletedURLs && deletedURLs.count > 0 ) {
-        await UserService.updateUserTotalShortendURL(userId, context,"decrement",uuids.length);
+      if (deletedURLs && deletedURLs.count > 0) {
+        await UserService.updateUserTotalShortendURL(
+          userId,
+          context,
+          "decrement",
+          uuids.length,
+        );
         return {
           isDeleted: true,
           message: "URLs Successfully Deleted",
@@ -206,7 +212,7 @@ export class GenUrlService {
         message: "URLs doesn't exist",
       };
     } catch (err) {
-      console.log("Error from deleteURLById", err);
+      console.log("Error from deleteMultipleURLById", err);
       CatchPrismaError(err);
     }
   }

@@ -29,6 +29,7 @@ const UrlCard = ({
   id,
   isBlock,
   totalVisitors,
+  uniqueHash,
   selectedURLIds,
 }: GeneratedURL & { selectedURLIds: Set<string> }) => {
   const [isSelected, setIsSelected] = useState(false);
@@ -110,8 +111,8 @@ const UrlCard = ({
         </div>
         <div>
           <a
-            href={generatedURL}
-            // href={`${import.meta.env.VITE_PUBLIC_URL}/${uniqueHash}`}
+            // href={generatedURL}
+            href={`${import.meta.env.VITE_PUBLIC_URL}/${uniqueHash}`}
             target="_blank"
             referrerPolicy="no-referrer"
             className={`${isBlock ? "text-muted-foreground": ""} mb-1 inline-block text-base`}
