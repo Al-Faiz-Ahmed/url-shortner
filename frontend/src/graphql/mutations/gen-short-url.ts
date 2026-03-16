@@ -76,3 +76,57 @@ export const DELETE_MULTIPLE_URL_BY_ID_MUTATION = gql`
     }
   }
 `;
+
+export type UpdateUrlVariables = {
+  userId: string;
+  urlId: string;
+  uniqueHash: string;
+  givenURL: string;
+  expirationDate: string;
+  isBlock: boolean;
+};
+
+export type UpdateUrlResponse = {
+  updateURLbyId: {
+    message: string;
+    isUpdated: boolean;
+    url: GeneratedURL;
+  };
+};
+
+export const UPDATE_URL_BY_ID_MUTATION = gql`
+  mutation UpdateURLbyId(
+    $userId: String!
+    $urlId: String!
+    $uniqueHash: String!
+    $givenURL: String!
+    $expirationDate: DateTime!
+    $isBlock: Boolean!
+  ) {
+    updateURLbyId(
+      input: {
+        userId: $userId
+        urlId: $urlId
+        uniqueHash: $uniqueHash
+        givenURL: $givenURL
+        expirationDate: $expirationDate
+        isBlock: $isBlock
+      }
+    ) {
+      message
+      isUpdated
+      url {
+        id
+        createdAt
+        expirationDate
+        generatedURL
+        givenURL
+        isBlock
+        totalVisitors
+        uniqueHash
+        updatedAt
+        userId
+      }
+    }
+  }
+`;

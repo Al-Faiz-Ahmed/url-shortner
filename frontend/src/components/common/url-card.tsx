@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +23,7 @@ import {
   type DeleteURLVariables,
 } from "@/graphql/mutations/gen-short-url";
 import { toast } from "sonner";
+import EditUrlDialog from "../shared/dialogs/edit-url";
 
 const UrlCard = ({
   generatedURL,
@@ -31,9 +33,14 @@ const UrlCard = ({
   totalVisitors,
   uniqueHash,
   selectedURLIds,
+  userId,
+  expirationDate,
+  createdAt,
+  updatedAt,
 }: GeneratedURL & { selectedURLIds: Set<string> }) => {
   const [isSelected, setIsSelected] = useState(false);
-  const { user,setUser } = useUser();
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const { user, setUser } = useUser();
   const [deleteURLbyIdMutaion, { loading: deleteLoading }] = useMutation<
     DeleteURLResponse,
     DeleteURLVariables
@@ -87,11 +94,31 @@ const UrlCard = ({
   };
 
   const editHandler = () => {
-    console.log("editHandler");
+    setEditDialogOpen(true);
   };
+
+  const urlForEdit: GeneratedURL | null = editDialogOpen
+    ? {
+        id,
+        generatedURL,
+        givenURL,
+        uniqueHash,
+        isBlock,
+        totalVisitors,
+        userId,
+        expirationDate,
+        createdAt,
+        updatedAt,
+      }
+    : null;
 
   return (
     <div>
+      <EditUrlDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        url={urlForEdit}
+      />
       <div className={`flex border  ${isBlock ? "border-muted-foreground opacity-80": "border-gray-400"} p-3 py-2 rounded-md gap-3 items-center`}>
         <div className="p-0.5 self-start">
           {selectedUrlsLength !== urlsLength - 1 || selectedURLIds.has(id) ? (
