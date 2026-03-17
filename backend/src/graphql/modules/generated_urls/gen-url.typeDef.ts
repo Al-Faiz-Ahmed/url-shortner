@@ -51,7 +51,7 @@ export const  genUrlTypeDefs = gql`
     givenURL:String!
     isBlock:Boolean!
     expirationDate:DateTime!
-    extendDays:Number!
+    extendDays:Int!
   }
 
 `;

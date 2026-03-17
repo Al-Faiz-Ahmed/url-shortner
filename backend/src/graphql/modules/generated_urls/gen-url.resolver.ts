@@ -202,7 +202,7 @@ export const genUrlMutationsResolver = {
     );
   },
 
-  updateUrlById: async (
+  updateURLbyId: async (
     _: unknown,
     payload: { input: IUpdateUrl },
     context: GraphQLContext,
