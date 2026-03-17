@@ -7,7 +7,8 @@ export type IGenUniqueUrl = Pick<GeneratedURL, "givenURL" | "uniqueHash"> & {
 
 export type IUpdateUrl = Pick<
   GeneratedURL,
-  "userId" | "id" | "givenURL" | "isBlock" | "expirationDate"
+  "userId" | "givenURL" | "isBlock" | "expirationDate"
 > & {
+  urlId: GeneratedURL["id"]
   extendDays: number;
 };

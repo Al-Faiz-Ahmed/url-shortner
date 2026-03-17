@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { IGenUniqueUrl } from "../../types/models";
+import { IGenUniqueUrl, IUpdateUrl } from "../../types/models";
 
 export const vGenUniqueUrl = z.object({
   givenURL: z.url(),
@@ -20,3 +20,13 @@ export const vUniqueHash = z.object({
     ),
 }) satisfies z.ZodType<{ uniqueHash: string }>;
 
+
+export const vUpdateUrl = z.object({
+  givenURL: z.url("Redirect Url is not Valid"),
+  userId: z.uuid("User Id is not a UUID"),
+  urlId:z.uuid("Url Id is not UUID"),
+  expirationDate:z.date(),
+  extendDays:z.number().min(1).max(2),
+  isBlock:z.boolean()
+
+}) satisfies z.ZodType<IUpdateUrl>;

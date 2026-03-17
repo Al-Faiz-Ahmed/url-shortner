@@ -6,5 +6,6 @@ export const genUrlMutationDefs = gql`
     generateUniqueURL(input: genUniqueUrlInput!): GeneratedUrl!
     deleteURLbyId(input: deleteURLInput!): DeleteURLRes!
     deleteMultipleURLbyId(input: deleteMultipleURLInput!): DeleteURLRes!
+    updateURLbyId(input: updateURLInput!):GeneratedUrl!
   }
 `;

@@ -45,4 +45,13 @@ export const  genUrlTypeDefs = gql`
     urlsId: [String!]!
   }
 
+  input updateURLInput {
+    userId:String!
+    urlId:String!
+    givenURL:String!
+    isBlock:Boolean!
+    expirationDate:DateTime!
+    extendDays:Number!
+  }
+
 `;

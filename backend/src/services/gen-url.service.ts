@@ -1,4 +1,4 @@
-import { IGenUniqueUrl } from "../types/models";
+import { IGenUniqueUrl, IUpdateUrl } from "../types/models";
 import {
   vGenUniqueUrl,
   vUniqueHash,
@@ -216,14 +216,40 @@ export class GenUrlService {
       CatchPrismaError(err);
     }
   }
-  // public static async updateUrlById(
-    
-  //   payload: {
-      
-      
-  //   }
-  //   context: GraphQLContext
-  // ){
-  //   const { prisma } = context;
-  // }
+  public static async updateUrlById(
+    payload: IUpdateUrl & { updatedExpirationDate: string },
+    context: GraphQLContext,
+  ) {
+    const { prisma } = context;
+    const {
+      expirationDate,
+      extendDays,
+      givenURL,
+      isBlock,
+      urlId,
+      userId,
+      updatedExpirationDate,
+    } = payload;
+
+    try {
+      return prisma.generatedURL.update({
+        where: {
+          id: urlId,
+          userId: userId,
+        },
+        data: {
+          givenURL: givenURL,
+          expirationDate:
+            extendDays !== 0 && updatedExpirationDate !== ""
+              ? updatedExpirationDate
+              : expirationDate,
+          isBlock: isBlock,
+        },
+        
+      });
+    } catch (err) {
+      console.log("Error from deleteMultipleURLById", err);
+      CatchPrismaError(err);
+    }
+  }
 }

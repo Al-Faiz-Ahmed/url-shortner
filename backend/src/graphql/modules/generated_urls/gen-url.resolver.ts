@@ -3,7 +3,10 @@ import { GraphQLContext } from "../../context/context";
 import { GenUrlService } from "../../../services/gen-url.service";
 import { UserService } from "../../../services/user.service";
 import { CatchPrismaError } from "../../../error/prisma.error";
-import { vGenUniqueUrl } from "../../../validations/models/gen-url-validation";
+import {
+  vGenUniqueUrl,
+  vUpdateUrl,
+} from "../../../validations/models/gen-url-validation";
 import {
   ForbiddenError,
   NotFoundError,
@@ -13,6 +16,7 @@ import {
   vMultipleUUIDS,
   vUserUUID,
 } from "../../../validations/models/user-validation";
+import { generatePsqlDate } from "../../../lib/utils/gen-psql-date";
 
 export const genUrlQueriesResolver = {
   getAllUrl: async (
@@ -203,7 +207,29 @@ export const genUrlMutationsResolver = {
     payload: { input: IUpdateUrl },
     context: GraphQLContext,
   ) => {
+    const { extendDays } = payload.input;
+    let newExtensionDate = "";
 
+    const responseId = vUpdateUrl.safeParse({ ...payload.input });
+
+    if (responseId.success === false) {
+      const schemaErr =
+        responseId.error.issues[0]?.message || "Error found in schema";
+      return ValidationError(schemaErr);
+    }
+
+    if (extendDays === 7 || extendDays === 14 || extendDays == 30) {
+      newExtensionDate = generatePsqlDate(extendDays);
+    }
+    try {
+      return await GenUrlService.updateUrlById(
+        { ...payload.input, updatedExpirationDate: newExtensionDate },
+        context,
+      );
+    } catch (err) {
+      console.log("Error from getAllUrlQueryResolver", err);
+      CatchPrismaError(err);
+    }
   },
 
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,

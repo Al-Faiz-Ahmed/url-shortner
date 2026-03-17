@@ -1,4 +1,4 @@
-export function generatePsqlDate(daysToAdd = 0) {
+export function generatePsqlDate(daysToAdd: 0 | 7 | 14 | 30 = 0) {
   const d = new Date();
 
   if (daysToAdd) {
@@ -6,5 +6,4 @@ export function generatePsqlDate(daysToAdd = 0) {
   }
 
   return d.toISOString();
-  
 }
