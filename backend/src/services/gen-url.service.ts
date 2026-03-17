@@ -216,11 +216,14 @@ export class GenUrlService {
       CatchPrismaError(err);
     }
   }
-  public static async updateUrlById(
-    userId: string,
-    urlId: string,
-    context: GraphQLContext
-  ){
-    const { prisma } = context;
-  }
+  // public static async updateUrlById(
+    
+  //   payload: {
+      
+      
+  //   }
+  //   context: GraphQLContext
+  // ){
+  //   const { prisma } = context;
+  // }
 }

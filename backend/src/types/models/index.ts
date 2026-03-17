@@ -1,18 +1,13 @@
-
-
-import { GeneratedURL,User } from "../../generated/prisma/client";
+import { GeneratedURL, User } from "../../generated/prisma/client";
 
 // input
 export type IGenUniqueUrl = Pick<GeneratedURL, "givenURL" | "uniqueHash"> & {
   userId?: string;
 };
 
-
-
-
-
-// export type IUpdateUser = Pick<User, "totalShortenedURL"|"id"> & {
-//   userId?: string;
-// };
-
-
+export type IUpdateUrl = Pick<
+  GeneratedURL,
+  "userId" | "id" | "givenURL" | "isBlock" | "expirationDate"
+> & {
+  extendDays: number;
+};

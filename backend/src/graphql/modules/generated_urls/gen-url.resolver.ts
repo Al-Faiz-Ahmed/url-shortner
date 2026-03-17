@@ -1,4 +1,4 @@
-import { IGenUniqueUrl } from "../../../types/models";
+import { IGenUniqueUrl, IUpdateUrl } from "../../../types/models";
 import { GraphQLContext } from "../../context/context";
 import { GenUrlService } from "../../../services/gen-url.service";
 import { UserService } from "../../../services/user.service";
@@ -196,6 +196,14 @@ export const genUrlMutationsResolver = {
     return ForbiddenError(
       `You can delete only ${urlsId.length - 1} Url at a time.`,
     );
+  },
+
+  updateUrlById: async (
+    _: unknown,
+    payload: { input: IUpdateUrl },
+    context: GraphQLContext,
+  ) => {
+
   },
 
   _empty: (_: unknown, _args: unknown, context: GraphQLContext) => `Faizan`,
