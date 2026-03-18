@@ -24,6 +24,7 @@ import {
   type UpdateUrlVariables,
 } from "@/graphql/mutations/gen-short-url";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 function parseExpirationDate(value: Date | string): Date {
   if (value instanceof Date) return value;
@@ -45,7 +46,9 @@ type FormStatus = {
   error?: string;
 };
 
-function getInitialFormValues(url: GeneratedURL | null): EditUrlFormValues | null {
+function getInitialFormValues(
+  url: GeneratedURL | null,
+): EditUrlFormValues | null {
   if (!url) return null;
   return {
     givenURL: url.givenURL,
@@ -62,10 +65,14 @@ function formEquals(a: EditUrlFormValues, b: EditUrlFormValues): boolean {
   );
 }
 
-export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialogProps) {
+export default function EditUrlDialog({
+  open,
+  onOpenChange,
+  url,
+}: EditUrlDialogProps) {
   const { updateUrl } = useUrls();
   const { user } = useUser();
-  const [extendDays,setExtendDays]  = useState<0|7|14|30>(0)
+  const [extendDays, setExtendDays] = useState<0 | 7 | 14 | 30>(0);
 
   const [updateUrlMutation, { loading }] = useMutation<
     UpdateUrlResponse,
@@ -75,9 +82,8 @@ export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialog
   const initialValues = useMemo(() => getInitialFormValues(url), [url]);
 
   const handleClose = useCallback(() => {
-    setExtendDays(0)
+    setExtendDays(0);
     onOpenChange(false);
-
   }, [onOpenChange]);
 
   const handleSubmit = useCallback(
@@ -110,7 +116,8 @@ export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialog
           if (updatedUrl) {
             updateUrl(url.id, updatedUrl);
           }
-          setExtendDays(0)
+          setExtendDays(0);
+          toast.success("URL Updated Successfully")
           handleClose();
         } catch (error: any) {
           setStatus({ error: error ? error.message : "" });
@@ -203,48 +210,52 @@ export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialog
                     Expiration Date
                   </label>
                   <div className="flex flex-wrap items-center gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        const from = new Date();
-                        const next = new Date(from);
-                        next.setDate(from.getDate() + 7);
-                        setFieldValue("expirationDate", next);
-                        setExtendDays(7)
-                      }}
-                    >
-                      +7 days
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        const from = new Date();
-                        const next = new Date(from);
-                        next.setDate(from.getDate() + 14);
-                        setFieldValue("expirationDate", next);
-                        setExtendDays(14)
-                      }}
-                    >
-                      +14 days
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        const from = new Date();
-                        const next = new Date(from);
-                        next.setDate(from.getDate() + 30);
-                        setFieldValue("expirationDate", next);
-                        setExtendDays(30)
-                      }}
-                    >
-                      +30 days
-                    </Button>
+                    {isExpired(url.expirationDate) && (
+                      <>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const from = new Date();
+                            const next = new Date(from);
+                            next.setDate(from.getDate() + 7);
+                            setFieldValue("expirationDate", next);
+                            setExtendDays(7);
+                          }}
+                        >
+                          +7 days
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const from = new Date();
+                            const next = new Date(from);
+                            next.setDate(from.getDate() + 14);
+                            setFieldValue("expirationDate", next);
+                            setExtendDays(14);
+                          }}
+                        >
+                          +14 days
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const from = new Date();
+                            const next = new Date(from);
+                            next.setDate(from.getDate() + 30);
+                            setFieldValue("expirationDate", next);
+                            setExtendDays(30);
+                          }}
+                        >
+                          +30 days
+                        </Button>
+                      </>
+                    )}
                     <span className="text-sm text-muted-foreground">
                       {values.expirationDate.toLocaleDateString()}
                     </span>
@@ -272,7 +283,9 @@ export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialog
                     }}
                     className={cn(
                       "relative flex items-center h-6 w-11 shrink-0 rounded-full border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                      canToggleBlock ? "cursor-pointer" : "cursor-not-allowed opacity-60",
+                      canToggleBlock
+                        ? "cursor-pointer"
+                        : "cursor-not-allowed opacity-60",
                       effectiveIsBlocked
                         ? "bg-primary border-primary"
                         : "bg-muted-foreground border-muted-foreground",
