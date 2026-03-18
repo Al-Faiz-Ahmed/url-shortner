@@ -217,18 +217,17 @@ export class GenUrlService {
     }
   }
   public static async updateUrlById(
-    payload: IUpdateUrl & { updatedExpirationDate: string },
+    payload: IUpdateUrl,
     context: GraphQLContext,
   ) {
     const { prisma } = context;
     const {
       expirationDate,
-      extendDays,
       givenURL,
       isBlock,
       urlId,
       userId,
-      updatedExpirationDate,
+      
     } = payload;
 
     try {
@@ -238,12 +237,9 @@ export class GenUrlService {
           userId: userId,
         },
         data: {
-          givenURL: givenURL,
-          expirationDate:
-            extendDays !== 0 && updatedExpirationDate !== ""
-              ? updatedExpirationDate
-              : expirationDate,
-          isBlock: isBlock,
+          givenURL,
+          expirationDate,
+          isBlock,
         },
         
       });

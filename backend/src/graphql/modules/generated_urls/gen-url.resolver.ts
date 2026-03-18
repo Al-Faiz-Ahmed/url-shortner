@@ -208,7 +208,6 @@ export const genUrlMutationsResolver = {
     context: GraphQLContext,
   ) => {
     const { extendDays } = payload.input;
-    let newExtensionDate = "";
 
     const responseId = vUpdateUrl.safeParse({ ...payload.input });
 
@@ -219,11 +218,11 @@ export const genUrlMutationsResolver = {
     }
 
     if (extendDays === 7 || extendDays === 14 || extendDays == 30) {
-      newExtensionDate = generatePsqlDate(extendDays);
+      payload.input.expirationDate = generatePsqlDate(extendDays);
     }
     try {
       return await GenUrlService.updateUrlById(
-        { ...payload.input, updatedExpirationDate: newExtensionDate },
+        payload.input,
         context,
       );
     } catch (err) {

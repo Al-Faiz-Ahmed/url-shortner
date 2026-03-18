@@ -25,7 +25,7 @@ export const vUpdateUrl = z.object({
   givenURL: z.url("Redirect Url is not Valid"),
   userId: z.uuid("User Id is not a UUID"),
   urlId:z.uuid("Url Id is not UUID"),
-  expirationDate:z.date(),
+  expirationDate:z.string(),
   extendDays:z.number().min(1).max(2),
   isBlock:z.boolean()
 

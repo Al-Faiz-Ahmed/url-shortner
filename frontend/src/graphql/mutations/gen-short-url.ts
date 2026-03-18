@@ -14,8 +14,14 @@ export type CreateShortUrlResponse = {
 
 // Adjust the field names to match your backend schema if needed.
 export const CREATE_SHORT_URL_MUTATION = gql`
-  mutation CreateShortUrl($givenURL: String!,$uniqueHash:String!, $userId:String) {
-    generateUniqueURL(input: {givenURL: $givenURL, uniqueHash: $uniqueHash, userId:$userId}){
+  mutation CreateShortUrl(
+    $givenURL: String!
+    $uniqueHash: String!
+    $userId: String
+  ) {
+    generateUniqueURL(
+      input: { givenURL: $givenURL, uniqueHash: $uniqueHash, userId: $userId }
+    ) {
       id
       createdAt
       expirationDate
@@ -29,10 +35,6 @@ export const CREATE_SHORT_URL_MUTATION = gql`
     }
   }
 `;
-
-
-
-
 
 export type DeleteURLVariables = {
   userId: string;
@@ -54,7 +56,6 @@ export const DELETE_URL_BY_ID_MUTATION = gql`
     }
   }
 `;
-
 
 export type DeleteMultipleURLVariables = {
   userId: string;
@@ -80,53 +81,45 @@ export const DELETE_MULTIPLE_URL_BY_ID_MUTATION = gql`
 export type UpdateUrlVariables = {
   userId: string;
   urlId: string;
-  uniqueHash: string;
   givenURL: string;
-  expirationDate: string;
   isBlock: boolean;
+  expirationDate: string;
+  extendDays: number;
 };
 
 export type UpdateUrlResponse = {
-  updateURLbyId: {
-    message: string;
-    isUpdated: boolean;
-    url: GeneratedURL;
-  };
+  updateURLbyId: GeneratedURL;
 };
 
 export const UPDATE_URL_BY_ID_MUTATION = gql`
   mutation UpdateURLbyId(
-    $userId: String!
-    $urlId: String!
-    $uniqueHash: String!
-    $givenURL: String!
-    $expirationDate: DateTime!
-    $isBlock: Boolean!
+    $userId:String!
+    $urlId:String!
+    $givenURL:String!
+    $isBlock:Boolean!
+    $expirationDate:DateTime!
+    $extendDays:Int!
   ) {
     updateURLbyId(
       input: {
         userId: $userId
         urlId: $urlId
-        uniqueHash: $uniqueHash
         givenURL: $givenURL
-        expirationDate: $expirationDate
         isBlock: $isBlock
+        expirationDate: $expirationDate
+        extendDays: $extendDays
       }
     ) {
-      message
-      isUpdated
-      url {
-        id
-        createdAt
-        expirationDate
-        generatedURL
-        givenURL
-        isBlock
-        totalVisitors
-        uniqueHash
-        updatedAt
-        userId
-      }
+      id
+      createdAt
+      expirationDate
+      generatedURL
+      givenURL
+      isBlock
+      totalVisitors
+      uniqueHash
+      updatedAt
+      userId
     }
   }
 `;

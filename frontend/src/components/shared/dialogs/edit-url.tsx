@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Formik, Form, Field, type FormikHelpers } from "formik";
 import { useMutation } from "@apollo/client/react";
 
@@ -65,6 +65,7 @@ function formEquals(a: EditUrlFormValues, b: EditUrlFormValues): boolean {
 export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialogProps) {
   const { updateUrl } = useUrls();
   const { user } = useUser();
+  const [extendDays,setExtendDays]  = useState<0|7|14|30>(0)
 
   const [updateUrlMutation, { loading }] = useMutation<
     UpdateUrlResponse,
@@ -74,7 +75,9 @@ export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialog
   const initialValues = useMemo(() => getInitialFormValues(url), [url]);
 
   const handleClose = useCallback(() => {
+    setExtendDays(0)
     onOpenChange(false);
+
   }, [onOpenChange]);
 
   const handleSubmit = useCallback(
@@ -95,27 +98,19 @@ export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialog
             variables: {
               userId: user.id,
               urlId: url.id,
-              uniqueHash: url.uniqueHash,
+              extendDays,
               givenURL: values.givenURL,
               expirationDate: values.expirationDate.toISOString(),
               isBlock: computedIsBlocked,
             },
           });
 
-          const updatedUrl = data?.updateURLbyId?.url;
-
-          updateUrl(url.id, {
-            uniqueHash: url.uniqueHash,
-            givenURL: values.givenURL,
-            generatedURL: url.generatedURL,
-            expirationDate: values.expirationDate,
-            isBlock: computedIsBlocked,
-          });
+          const updatedUrl = data?.updateURLbyId;
 
           if (updatedUrl) {
             updateUrl(url.id, updatedUrl);
           }
-
+          setExtendDays(0)
           handleClose();
         } catch (error: any) {
           setStatus({ error: error ? error.message : "" });
@@ -217,6 +212,7 @@ export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialog
                         const next = new Date(from);
                         next.setDate(from.getDate() + 7);
                         setFieldValue("expirationDate", next);
+                        setExtendDays(7)
                       }}
                     >
                       +7 days
@@ -230,6 +226,7 @@ export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialog
                         const next = new Date(from);
                         next.setDate(from.getDate() + 14);
                         setFieldValue("expirationDate", next);
+                        setExtendDays(14)
                       }}
                     >
                       +14 days
@@ -243,6 +240,7 @@ export default function EditUrlDialog({ open, onOpenChange, url }: EditUrlDialog
                         const next = new Date(from);
                         next.setDate(from.getDate() + 30);
                         setFieldValue("expirationDate", next);
+                        setExtendDays(30)
                       }}
                     >
                       +30 days

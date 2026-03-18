@@ -50,7 +50,7 @@ export const  genUrlTypeDefs = gql`
     urlId:String!
     givenURL:String!
     isBlock:Boolean!
-    expirationDate:DateTime!
+    expirationDate:String!
     extendDays:Int!
   }
 
