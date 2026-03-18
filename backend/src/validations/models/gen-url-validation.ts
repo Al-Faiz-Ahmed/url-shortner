@@ -26,7 +26,7 @@ export const vUpdateUrl = z.object({
   userId: z.uuid("User Id is not a UUID"),
   urlId:z.uuid("Url Id is not UUID"),
   expirationDate:z.string(),
-  extendDays:z.number().min(1).max(2),
+  extendDays:z.number().max(30,"Extend Days Cannot be greater than 30"),
   isBlock:z.boolean()
 
 }) satisfies z.ZodType<IUpdateUrl>;
