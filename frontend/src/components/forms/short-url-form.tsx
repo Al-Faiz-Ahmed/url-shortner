@@ -119,6 +119,7 @@ export function ShortUrlForm() {
                         aria-describedby={
                           meta.touched && meta.error ? "url-error" : undefined
                         }
+                        type="url"
                       />
                       {!status?.error && meta.touched && meta.error && (
                         <p

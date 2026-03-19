@@ -19,23 +19,22 @@ app.get("/", (_req, res) => {
   res.json({ message: "Server Root Page served succesfully" });
 });
 
-app.use("/graphql", yoga);
+app.use("/api/graphql", yoga);
 
 // Short URL redirect: only single-segment paths (e.g. /ae5tf); nested paths -> 404
-app.get("/*splat", async (req: Request, res: Response) => {
-  const segments = req.path.split("/"); // "/ae5tf" -> ["ae5tf"], "/asf45/ok" -> ["asf45","ok"]
-  if (segments.length !== 2) {
-    
-    return res.status(404).json({ error: "Page Not Found" });
-  }
+app.get("/api/find/:id", async (req: Request, res: Response) => {
 
-  const shortCode = segments[1] as string;
+  const shortCode = req.params.id as string;
 
   const originalUrl = await GenUrlService.resolveShortCode(shortCode);
   if (!originalUrl) {
     return res.status(404).json({ error: "Short link not found or blocked by provider" });
   }
   return res.json({data:originalUrl});
+});
+
+app.use((req: Request, res: Response) => {
+  res.status(404).json({message:"404 Page Not Found"});
 });
 
 

@@ -1,4 +1,4 @@
-import { useUrls, useUser } from "@/hooks";
+import { useCopyToClipboard, useUrls, useUser } from "@/hooks";
 import type { GeneratedURL } from "@/types";
 import {
   EllipsisVertical,
@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +23,8 @@ import {
 } from "@/graphql/mutations/gen-short-url";
 import { toast } from "sonner";
 import EditUrlDialog from "../shared/dialogs/edit-url";
+import ConfirmDeleteUrlDialog from "../shared/dialogs/confirm-delete-url";
+import { envConfig } from "@/config/env-config";
 
 const UrlCard = ({
   generatedURL,
@@ -40,6 +41,7 @@ const UrlCard = ({
 }: GeneratedURL & { selectedURLIds: Set<string> }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { user, setUser } = useUser();
   const [deleteURLbyIdMutaion, { loading: deleteLoading }] = useMutation<
     DeleteURLResponse,
@@ -47,6 +49,7 @@ const UrlCard = ({
   >(DELETE_URL_BY_ID_MUTATION);
 
   const { selectUrl, removeUrlByid, urls, selectedUrls } = useUrls();
+  const {copy}  = useCopyToClipboard()
 
   const urlsLength = urls.length;
   const selectedUrlsLength = selectedUrls.length;
@@ -97,6 +100,16 @@ const UrlCard = ({
     setEditDialogOpen(true);
   };
 
+  const openDeleteDialog = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const copyHandler = () => {
+      copy(`${envConfig.FRONTEND_SITE_URL}/${uniqueHash}`).then(()=>{
+        toast.success("URL Copied")
+      })
+  }
+
   const urlForEdit: GeneratedURL | null = editDialogOpen
     ? {
         id,
@@ -119,6 +132,14 @@ const UrlCard = ({
         onOpenChange={setEditDialogOpen}
         url={urlForEdit}
       />
+      <ConfirmDeleteUrlDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={() => {
+          deleteHandler();
+          setDeleteDialogOpen(false);
+        }}
+      />
       <div className={`flex border  ${isBlock ? "border-muted-foreground opacity-80": "border-gray-400"} p-3 py-2 rounded-md gap-3 items-center`}>
         <div className="p-0.5 self-start">
           {selectedUrlsLength !== urlsLength - 1 || selectedURLIds.has(id) ? (
@@ -129,9 +150,9 @@ const UrlCard = ({
               className="cursor-pointer"
             >
               {isSelected ? (
-                <SquareCheck className="text-primary size-5" />
+                <SquareCheck className="text-primary size-4 sm:size-5" />
               ) : (
-                <Square className="text-muted-foreground size-5" />
+                <Square className="text-muted-foreground size-4 sm:size-5" />
               )}
             </button>
           ) : null}
@@ -139,20 +160,20 @@ const UrlCard = ({
         <div>
           <a
             // href={generatedURL}
-            href={`${import.meta.env.VITE_PUBLIC_URL}/${uniqueHash}`}
+            href={`${envConfig.FRONTEND_SITE_URL}/${uniqueHash}`}
             target="_blank"
             referrerPolicy="no-referrer"
-            className={`${isBlock ? "text-muted-foreground": ""} mb-1 inline-block text-base`}
+            className={`${isBlock ? "text-muted-foreground": ""} mb-1 inline-block text-sm sm:text-base`}
             rel="noreferrer"
           >
-            {generatedURL}
+            {`${envConfig.FRONTEND_SITE_URL}/${uniqueHash}`}
           </a>
           <p className="text-muted-foreground text-xs line-clamp-1">
             {givenURL.length < 35 ? givenURL : givenURL.slice(0, 35) + "..."}
           </p>
         </div>
         <div className="flex ml-auto items-center gap-x-4 font-sans">
-          <div className="text-xs bg-primary-800 text-primary rounded-full px-2 py-1">
+          <div className="text-xs bg-primary-800 text-primary rounded-full px-2 py-1 hidden sm:block">
             {totalVisitors < 1 ? (
               <div
                 title={totalVisitors + " View"}
@@ -172,7 +193,13 @@ const UrlCard = ({
             )}
           </div>
           {selectedUrlsLength < 1 && (
-            <UrlCardActions isBlock={isBlock} onDelete={deleteHandler} onEdit={editHandler} />
+            <UrlCardActions
+              onCopytoCB={copyHandler}
+              totalVisitors={totalVisitors}
+              isBlock={isBlock}
+              onDelete={openDeleteDialog}
+              onEdit={editHandler}
+            />
           )}
         </div>
       </div>
@@ -185,11 +212,15 @@ export default UrlCard;
 const UrlCardActions = ({
   onDelete,
   onEdit,
-  isBlock
+  isBlock,
+  onCopytoCB,
+  totalVisitors
 }: {
   onDelete: () => void;
   onEdit: () => void;
+  onCopytoCB: () => void;
   isBlock:boolean
+  totalVisitors:number
 }) => {
   const { urls } = useUrls();
   return (
@@ -200,15 +231,20 @@ const UrlCardActions = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuGroup>
-          <DropdownMenuItem onMouseUp={onEdit} className="cursor-pointer">
+        <DropdownMenuGroup className="divide-y divide-muted-foreground/30 ">
+          <DropdownMenuItem onMouseUp={onEdit} className="cursor-pointer rounded-none sm:hidden">
+            Views <span className="inline-flex ml-auto text-primary">{totalVisitors}</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onMouseUp={onCopytoCB} className="cursor-pointer rounded-none">
+            Copy Url
+          </DropdownMenuItem>
+          <DropdownMenuItem onMouseUp={onEdit} className="cursor-pointer rounded-none">
             Edit
           </DropdownMenuItem>
           {urls && urls.length > 1 && (
             <DropdownMenuItem
               onMouseUp={onDelete}
-              className="cursor-pointer"
-              variant="destructive"
+              className="cursor-pointer "
             >
               Delete
             </DropdownMenuItem>

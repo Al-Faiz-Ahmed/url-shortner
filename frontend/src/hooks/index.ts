@@ -7,3 +7,5 @@ export {
   useUrlActions,
   useSelectedUrl,
 } from "./use-gen-url";
+
+export {useCopyToClipboard} from "./use-copy-clipboard"
