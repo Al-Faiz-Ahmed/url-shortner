@@ -18,6 +18,7 @@ import {
 import { toast } from "sonner";
 
 import { STORAGE_KEYS } from "@/utils/constants";
+import { cn } from "@/utils/cn";
 import type { GeneratedURL } from "@/types";
 import UrlSectionHeader from "../layout/url-section-header";
 
@@ -119,12 +120,14 @@ const GeneratedUrlSection = () => {
   });
 
   return (
-    <section className="pt-20  px-4">
+    <section
+      className={cn("pt-20 px-4 min-h-96 cnu", urls.length >= 2 && "mb-20")}
+    >
       {!user || urls.length < 1 ? (
         <p className="text-md md:text-lg leading-relaxed text-muted-foreground/80 w-fit mx-auto text-center">
           Create your first <span className="text-primary">Tini Tiny </span>
-          URL from here <br /> and share with 8,300,000,000 billion people{" "}
-          <br /> around the globe.
+          URL from here <br className="max-[30rem]:hidden" /> and share with 8,300,000,000 billion people{" "}
+          <br className="max-[30rem]:hidden"  /> around the globe.
         </p>
       ) : (
         <div>

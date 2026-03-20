@@ -1,11 +1,10 @@
-import { Header } from "@/components/layout/header";
 import { ShortUrlForm } from "@/components/forms/short-url-form";
 import GeneratedUrlSection from "@/components/common/urls-section";
+import Footer from "@/components/layout/footer";
 
 export function Home() {
   return (
-    <div>
-      <Header />
+    <div className="pt-16">
 
       <section className="w-full max-w-2xl mx-auto gap-8 bg-red pt-4">
         <div className="space-y-4 text-center mb-6 md:mb-8">
@@ -20,6 +19,8 @@ export function Home() {
 
         <GeneratedUrlSection />
       </section>
+
+      <Footer />
     </div>
   );
 }
