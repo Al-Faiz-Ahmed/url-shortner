@@ -157,7 +157,7 @@ const UrlCard = ({
             </button>
           ) : null}
         </div>
-        <div>
+        <div className="flex-1 min-w-0">
           <a
             // href={generatedURL}
             href={`${envConfig.FRONTEND_SITE_URL}/${uniqueHash}`}
@@ -167,9 +167,11 @@ const UrlCard = ({
             rel="noreferrer"
           >
             {`${envConfig.FRONTEND_SITE_URL}/${uniqueHash}`}
+           
           </a>
-          <p className="text-muted-foreground text-xs line-clamp-1">
-            {givenURL.length < 35 ? givenURL : givenURL.slice(0, 35) + "..."}
+          
+          <p className="text-muted-foreground text-xs truncate w-full max-w-[28ch] sm:max-w-[32ch]">
+            {givenURL}
           </p>
         </div>
         <div className="flex ml-auto items-center gap-x-4 font-sans">
