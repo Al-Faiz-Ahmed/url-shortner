@@ -18,7 +18,7 @@ export const useUrlStore = create<UrlState>()(
         addUrl: (url) =>
           set(
             (state) => ({
-              generatedURLs: [url, ...state.generatedURLs],
+              generatedURLs: state.generatedURLs.length === 0 ? [url] :[url, ...state.generatedURLs],
             }),
             false,
             "addUrl",

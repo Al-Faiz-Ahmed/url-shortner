@@ -6,7 +6,7 @@ export async function slugLoader({
   }: LoaderFunctionArgs) {
     const { slug } = params;
   
-    const res = await fetch(`${envConfig.BACKEND_API_URL}/${slug}`); // 👈 adjust to your API endpoint
+    const res = await fetch(`${envConfig.BACKEND_API_URL}/find/${slug}`); // 👈 adjust to your API endpoint
 
     if (res.status === 404) {
       throw new Response("Short URL not found", { status: 404 });
